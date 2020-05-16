@@ -56,10 +56,6 @@ const VideoTabs: React.FC = props => {
     setValue(newValue);
   };
 
-  const handleChangeIndex = (index: number) => {
-    setValue(index);
-  };
-
   let tbs: ITab[] = [
     {
       label: "Stream One",

@@ -19,11 +19,13 @@ import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { IState } from "../../Store/reducer";
 import { openModal } from "../../Store/actions";
-import AddVideoForm from "../Forms/AddVideoForm";
+import VideoForm from "../Forms/VideoForm";
+import { EVideoFormType } from '../../Enums/EVideoFormType';
 interface IVideoListState {}
 
 interface IVideoListProps {
   openModal: Function;
+  videos: IVideo[]
 }
 class VideoList extends React.Component<IVideoListProps, IVideoListState> {
   videos: IVideo[] = [
@@ -48,7 +50,7 @@ class VideoList extends React.Component<IVideoListProps, IVideoListState> {
   ];
 
   addVideo = () => {
-    this.props.openModal(<AddVideoForm />);
+    this.props.openModal(<VideoForm type={EVideoFormType.ADD} />);
   };
   render() {
     return (
@@ -58,7 +60,7 @@ class VideoList extends React.Component<IVideoListProps, IVideoListState> {
         </Button>
 
         <List>
-          {this.videos.map((vid, index) => (
+          {this.props.videos.map((vid, index) => (
             <ListItem key={index}>
               <ListItemIcon>
                 {vid.type === EVideoType.FILE ? (
@@ -87,7 +89,8 @@ class VideoList extends React.Component<IVideoListProps, IVideoListState> {
 const mapStateToProps = (state: IState) => {
   return {
     open: state.modal_open,
-    component: state.modal_component
+    component: state.modal_component,
+    videos: state.videos
   };
 };
 

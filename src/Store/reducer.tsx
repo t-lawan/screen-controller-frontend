@@ -7,13 +7,15 @@ export interface IState {
   videos: IVideo[];
   modal_open: boolean;
   modal_component: any;
+  hasLoaded: false;
 }
 
 const initalState: IState = {
   screens: [],
   videos: [],
   modal_open: false,
-  modal_component: null
+  modal_component: null,
+  hasLoaded: false
 };
 
 export const reducer = (state: IState = initalState, action: AnyAction) => {

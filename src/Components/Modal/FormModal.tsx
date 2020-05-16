@@ -32,7 +32,7 @@ class FormModal extends React.Component<IModalProps, IModalState> {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => this.closeModal()} color="primary">
-            Cancel
+            Close
           </Button>
         </DialogActions>
       </Dialog>

@@ -3,6 +3,7 @@ import { Container } from "@material-ui/core";
 import Navbar from "../Navbar/Navbar";
 import { Helmet } from "react-helmet";
 import FormModal from "../Modal/FormModal";
+import State from "../State/State";
 
 interface LayoutProps {
   children: any;
@@ -15,6 +16,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
         <title> {props.title} - Screen Controller </title>
 
       </Helmet>
+      <State />
       <Container>
         <FormModal />
         <Navbar />
