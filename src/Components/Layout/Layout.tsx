@@ -2,6 +2,7 @@ import * as React from "react";
 import { Container } from "@material-ui/core";
 import Navbar from "../Navbar/Navbar";
 import { Helmet } from "react-helmet";
+import FormModal from "../Modal/FormModal";
 
 interface LayoutProps {
   children: any;
@@ -15,8 +16,9 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
 
       </Helmet>
       <Container>
+        <FormModal />
         <Navbar />
-        {props.children}
+          {props.children}
       </Container>
     </>
   );

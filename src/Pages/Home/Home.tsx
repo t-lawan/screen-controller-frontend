@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from '../../Components/Layout/Layout';
-import VideoTabs from '../../Components/Tabs/Tabs';
+import VideoTabs from '../../Components/Tabs/VideoTabs';
 
 const Home: React.FC = () => {
     return (
