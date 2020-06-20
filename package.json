@@ -30,7 +30,8 @@
     "react-scripts": "3.4.1",
     "styled-components": "^5.1.0",
     "typescript": "~3.7.2",
-    "validator": "^13.0.0"
+    "validator": "^13.0.0",
+    "video-react": "^0.14.1"
   },
   "scripts": {
     "start": "react-scripts start",

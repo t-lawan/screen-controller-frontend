@@ -5,6 +5,7 @@ import {
   Tab,
   Box
 } from "@material-ui/core";
+import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
 interface IVideoTabsState {
   index: number;
@@ -84,7 +85,7 @@ const VideoTabs: React.FC = props => {
       </Tabs>
       {tbs.map((tb, index) => (
         <TabPanel key={index} value={value} index={index}>
-          {tb.video}
+          <VideoPlayer videoUrl={'https://dt8c09yje207j.cloudfront.net/Jenna+Sutela_Holobiont_2018.mov'} />
         </TabPanel>
       ))}
 

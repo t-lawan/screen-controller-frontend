@@ -15,41 +15,59 @@ import {
 import { EVideoFormType } from "../../Enums/EVideoFormType";
 import { EVideoType } from "../../Enums/EVideoType";
 import RequestManager from "../../Utils/RequestManager";
-import { IAddVideoRequestBody } from "../../Interfaces/IRequestData";
+import {
+  IAddVideoRequestBody,
+  IUpdateVideoRequestBody
+} from "../../Interfaces/IRequestData";
 import { EFormStatus } from "../../Enums/EFormStatus";
+import { IVideo } from "../../Interfaces/IVideo";
 
 interface IVideoFormState {
   [key: string]: any;
+  id: string;
   title: string;
   uri: string;
-  type: EVideoType;
+  video_type: EVideoType;
   status: EFormStatus;
   errors: {
     title: string;
     uri: string;
-    type: string;
+    video_type: string;
   };
 }
 interface IVideoFormProps {
   type: EVideoFormType;
   id?: string;
+  videos?: IVideo[];
 }
 class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
   constructor(props: IVideoFormProps) {
     super(props);
     this.state = {
+      id: "",
       title: "",
       uri: "",
-      type: EVideoType.FILE,
-      status: EFormStatus.FILLING,
+      video_type: EVideoType.FILE,
+      status: EFormStatus.INIT,
       errors: {
         title: "",
         uri: "",
-        type: ""
+        video_type: ""
       }
     };
   }
 
+  componentDidMount() {
+    this.setVideoState();
+  }
+
+  updateStatusToFilling = () => {
+    if (this.state.status !== EFormStatus.FILLING) {
+      this.setState({
+        status: EFormStatus.FILLING
+      });
+    }
+  };
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     let errors = this.state.errors;
@@ -73,6 +91,13 @@ class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
     });
   };
 
+  handleSelectChange = event => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
+
   handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     this.setState({
@@ -81,16 +106,35 @@ class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
     if (this.props.type === EVideoFormType.ADD) {
       let data: IAddVideoRequestBody = {
         title: this.state.title,
-        type: this.state.type,
+        video_type: this.state.video_type,
         uri: this.state.uri
       };
 
-      console.log("DATA", data);
       await RequestManager.addVideo(data)
         .then(response => {
           // Add new Video To Store
 
-          console.log("RESPONSE", response.data);
+          this.setState({
+            status: EFormStatus.COMPLETED
+          });
+        })
+        .catch(error => {
+          this.setState({
+            status: EFormStatus.FAILED
+          });
+        });
+    }
+
+    if (this.props.type === EVideoFormType.EDIT) {
+      let data: IUpdateVideoRequestBody = {
+        title: this.state.title,
+        video_type: this.state.video_type,
+        uri: this.state.uri,
+        id: this.state.id
+      };
+
+      await RequestManager.editVideo(data)
+        .then(resp => {
           this.setState({
             status: EFormStatus.COMPLETED
           });
@@ -102,13 +146,41 @@ class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
         });
     }
   };
+
+  setVideoState = () => {
+    if (
+      this.props.type === EVideoFormType.EDIT &&
+      this.props.id &&
+      this.props.videos &&
+      this.state.status === EFormStatus.INIT
+    ) {
+      let video = this.props.videos.find(vid => {
+        return vid.id === this.props.id;
+      });
+
+      if (video) {
+        this.setState({
+          title: video.title,
+          video_type: video.video_type,
+          uri: video.uri,
+          id: video.id ? video.id : ""
+        });
+      }
+    }
+
+    if (this.state.status === EFormStatus.INIT) {
+      this.setState({
+        status: EFormStatus.LOADED
+      });
+    }
+  };
   render() {
     return (
       <>
         <Typography component="h3">
           {this.props.type === EVideoFormType.ADD ? "Add Video" : "Edit Video"}
         </Typography>
-        {this.state.status === EFormStatus.FILLING ? (
+        {this.state.status === EFormStatus.LOADED ? (
           <form onSubmit={this.handleSubmit.bind(this)}>
             <FormControl fullWidth>
               <TextField
@@ -121,11 +193,12 @@ class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
               />
             </FormControl>
             <FormControl fullWidth>
-              <InputLabel id="video-type">Video Type</InputLabel>
+              <InputLabel id="video_type">Video Type</InputLabel>
               <Select
-                labelId="video-type"
+                labelId="video_type"
                 value={this.state.type}
-                //   onChange={this.handleInputChange.bind(this)}
+                name="video_type"
+                onChange={this.handleSelectChange.bind(this)}
               >
                 <MenuItem value={EVideoType.FILE}>Video File</MenuItem>
                 <MenuItem value={EVideoType.STREAM}>Video Stream</MenuItem>
@@ -150,9 +223,15 @@ class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
             <Button type="submit"> Submit </Button>
           </form>
         ) : null}
-        {this.state.status === EFormStatus.WAITING ? (<h2> Please wait </h2>) : null}
-        {this.state.status === EFormStatus.FAILED ? (<h2> Request Failed </h2>) : null}
-        {this.state.status === EFormStatus.COMPLETED ? (<h2> {this.state.title} was successfully added </h2>) : null}
+        {this.state.status === EFormStatus.WAITING ? (
+          <h2> Please wait </h2>
+        ) : null}
+        {this.state.status === EFormStatus.FAILED ? (
+          <h2> Request Failed </h2>
+        ) : null}
+        {this.state.status === EFormStatus.COMPLETED ? (
+          <h2> {this.state.title} was successfully added </h2>
+        ) : null}
       </>
     );
   }
@@ -161,7 +240,8 @@ class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
 const mapStateToProps = (state: IState) => {
   return {
     open: state.modal_open,
-    component: state.modal_component
+    component: state.modal_component,
+    videos: state.videos
   };
 };
 

@@ -21,6 +21,7 @@ import { IState } from "../../Store/reducer";
 import { openModal } from "../../Store/actions";
 import VideoForm from "../Forms/VideoForm";
 import { EVideoFormType } from '../../Enums/EVideoFormType';
+
 interface IVideoListState {}
 
 interface IVideoListProps {
@@ -28,30 +29,16 @@ interface IVideoListProps {
   videos: IVideo[]
 }
 class VideoList extends React.Component<IVideoListProps, IVideoListState> {
-  videos: IVideo[] = [
-    {
-      uri: "hello.jpg",
-      id: "fdds",
-      title: "Hello Picture",
-      type: EVideoType.FILE
-    },
-    {
-      uri: "jerry.jpg",
-      id: "fdds",
-      title: "Jerry Picture",
-      type: EVideoType.STREAM
-    },
-    {
-      uri: "john.jpg",
-      id: "fdds",
-      title: "Akinsola Picture",
-      type: EVideoType.FILE
-    }
-  ];
 
   addVideo = () => {
     this.props.openModal(<VideoForm type={EVideoFormType.ADD} />);
   };
+
+  editVideo = (id: string | undefined) => {
+    if(id) {
+      this.props.openModal(<VideoForm type={EVideoFormType.EDIT} id={id} />);
+    }
+  }
   render() {
     return (
       <>
@@ -63,7 +50,7 @@ class VideoList extends React.Component<IVideoListProps, IVideoListState> {
           {this.props.videos.map((vid, index) => (
             <ListItem key={index}>
               <ListItemIcon>
-                {vid.type === EVideoType.FILE ? (
+                {vid.video_type === EVideoType.FILE ? (
                   <OndemandVideoOutlined />
                 ) : (
                   <VideocamOutlined />
@@ -71,7 +58,7 @@ class VideoList extends React.Component<IVideoListProps, IVideoListState> {
               </ListItemIcon>
               <ListItemText primary={vid.title} />
               <ListItemSecondaryAction>
-                <Button>
+                <Button onClick={() => this.editVideo(vid.id)}>
                   <EditOutlined />
                 </Button>
                 <Button>
