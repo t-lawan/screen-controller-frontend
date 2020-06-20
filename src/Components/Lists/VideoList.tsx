@@ -20,30 +20,63 @@ import { Dispatch } from "redux";
 import { IState } from "../../Store/reducer";
 import { openModal } from "../../Store/actions";
 import VideoForm from "../Forms/VideoForm";
-import { EVideoFormType } from '../../Enums/EVideoFormType';
+import { EVideoFormType } from "../../Enums/EVideoFormType";
+import RequestManager from "../../Utils/RequestManager";
+import { IUpdateVideoRequestBody } from "../../Interfaces/IRequestData";
 
-interface IVideoListState {}
+interface IVideoListState {
+  videos: IVideo[];
+}
 
 interface IVideoListProps {
   openModal: Function;
-  videos: IVideo[]
+  videos: IVideo[];
 }
 class VideoList extends React.Component<IVideoListProps, IVideoListState> {
+  constructor(props: IVideoListProps) {
+    super(props);
+    this.state = {
+      videos: [...this.props.videos]
+    };
+  }
+
+
+  componentDidMount() {
+    let videos = [...this.props.videos]
+    console.log(videos)
+    this.setState({
+      videos: videos
+    });
+  }
 
   addVideo = () => {
     this.props.openModal(<VideoForm type={EVideoFormType.ADD} />);
   };
 
   editVideo = (id: string | undefined) => {
-    if(id) {
+    if (id) {
       this.props.openModal(<VideoForm type={EVideoFormType.EDIT} id={id} />);
     }
-  }
+  };
+
+  deleteVideo = async (video: IVideo) => {
+    if (video.id) {
+      let reqData: IUpdateVideoRequestBody = {
+        id: video.id,
+        title: video.title,
+        video_type: video.video_type,
+        uri: video.uri
+      };
+      await RequestManager.deleteVideo(reqData).then(r => {
+      });
+    }
+  };
   render() {
+    console.log('PROPS', this.props.videos)
     return (
       <>
         <Button onClick={() => this.addVideo()}>
-            <p> Add Video</p>
+          <p> Add Video</p>
         </Button>
 
         <List>
@@ -61,7 +94,7 @@ class VideoList extends React.Component<IVideoListProps, IVideoListState> {
                 <Button onClick={() => this.editVideo(vid.id)}>
                   <EditOutlined />
                 </Button>
-                <Button>
+                <Button onClick={() => this.deleteVideo(vid)}>
                   <DeleteOutlined />
                 </Button>
               </ListItemSecondaryAction>
