@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { IAddVideoRequestBody, IUpdateVideoRequestBody } from '../Interfaces/IRequestData';
+import { IAddVideoRequestBody, IUpdateVideoRequestBody, IAddScreenRequestBody, IUpdateScreenRequestBody } from '../Interfaces/IRequestData';
 
 
 export default class RequestManager {
@@ -9,11 +9,19 @@ export default class RequestManager {
         return await this.post(`${this.baseUrl}/video/create`, data);
     }
 
+    static async addScreen(data: IAddScreenRequestBody) {
+        return await this.post(`${this.baseUrl}/screen/create`, data);
+    }
+
     static async getVideos() {
         return await this.get(`${this.baseUrl}/videos`);
     }
 
     static async editVideo(data: IUpdateVideoRequestBody) {
+        return await this.post(`${this.baseUrl}/video/update`, data);
+    }
+
+    static async editScreen(data: IUpdateScreenRequestBody) {
         return await this.post(`${this.baseUrl}/video/update`, data);
     }
 

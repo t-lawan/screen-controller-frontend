@@ -1,14 +1,13 @@
 import React from "react";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
-import { IVideo } from "../../Interfaces/IVideo";
-import { EVideoType } from "../../Enums/EVideoType";
+
 import {
   OndemandVideoOutlined,
+  VideoLabelOutlined,
   VideocamOutlined,
   EditOutlined,
   DeleteOutlined
@@ -20,80 +19,61 @@ import { IState } from "../../Store/reducer";
 import { openModal } from "../../Store/actions";
 import VideoForm from "../Forms/VideoForm";
 import { EFormType } from '../../Enums/EFormType';
-import RequestManager from "../../Utils/RequestManager";
-import { IUpdateVideoRequestBody } from "../../Interfaces/IRequestData";
+import { IUpdateScreenRequestBody } from '../../Interfaces/IRequestData';
+import { IScreen } from '../../Interfaces/IScreen';
 
-interface IVideoListState {
-  videos: IVideo[];
+interface IScreenListState {
+  screens: IScreen[];
 }
 
-interface IVideoListProps {
+interface IScreenListProps {
   openModal: Function;
-  videos: IVideo[];
+  screens: IScreen[];
 }
-class VideoList extends React.Component<IVideoListProps, IVideoListState> {
-  constructor(props: IVideoListProps) {
+class ScreenList extends React.Component<IScreenListProps, IScreenListState> {
+  constructor(props: IScreenListProps) {
     super(props);
-    this.state = {
-      videos: [...this.props.videos]
-    };
   }
 
-
-  componentDidMount() {
-    let videos = [...this.props.videos]
-    console.log(videos)
-    this.setState({
-      videos: videos
-    });
-  }
-
-  addVideo = () => {
+  addScreen = () => {
     this.props.openModal(<VideoForm type={EFormType.ADD} />);
   };
 
-  editVideo = (id: string | undefined) => {
+  editScreen = (id: string | undefined) => {
     if (id) {
       this.props.openModal(<VideoForm type={EFormType.EDIT} id={id} />);
     }
   };
 
-  deleteVideo = async (video: IVideo) => {
-    if (video.id) {
-      let reqData: IUpdateVideoRequestBody = {
-        id: video.id,
-        title: video.title,
-        video_type: video.video_type,
-        uri: video.uri
+  deleteScreen = async (screen: IScreen) => {
+    if (screen.id) {
+      let reqData: IUpdateScreenRequestBody = {
+        ...screen,
+        id: screen.id
       };
-      await RequestManager.deleteVideo(reqData).then(r => {
-      });
+    //   await RequestManager. (reqData).then(r => {
+    //   });
     }
   };
   render() {
-    console.log('PROPS', this.props.videos)
     return (
       <>
-        <Button onClick={() => this.addVideo()}>
-          <p> Add Video</p>
+        <Button onClick={() => this.addScreen()}>
+          <p> Add Screen</p>
         </Button>
 
         <List>
-          {this.props.videos.map((vid, index) => (
+          {this.props.screens.map((scr, index) => (
             <ListItem key={index}>
               <ListItemIcon>
-                {vid.video_type === EVideoType.FILE ? (
-                  <OndemandVideoOutlined />
-                ) : (
-                  <VideocamOutlined />
-                )}
+                <VideoLabelOutlined />
               </ListItemIcon>
-              <ListItemText primary={vid.title} />
+              <ListItemText primary={scr.local_ip_address} />
               <ListItemSecondaryAction>
-                <Button onClick={() => this.editVideo(vid.id)}>
+                <Button onClick={() => this.editScreen(scr.id)}>
                   <EditOutlined />
                 </Button>
-                <Button onClick={() => this.deleteVideo(vid)}>
+                <Button onClick={() => this.deleteScreen(scr)}>
                   <DeleteOutlined />
                 </Button>
               </ListItemSecondaryAction>
@@ -109,7 +89,7 @@ const mapStateToProps = (state: IState) => {
   return {
     open: state.modal_open,
     component: state.modal_component,
-    videos: state.videos
+    screens: state.screens
   };
 };
 
@@ -122,4 +102,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(VideoList);
+)(ScreenList);

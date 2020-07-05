@@ -7,7 +7,14 @@ import {
   Button,
 } from "@material-ui/core";
 import {Menu} from '@material-ui/icons'
+import { Link } from 'react-router-dom';
+import styled from "styled-components";
 
+
+const NavLink = styled(Link)`
+  text-decoration: none;
+  color: white;
+`
 interface INavbarState {
     
 }
@@ -23,7 +30,9 @@ export default class Navbar extends React.Component<INavbarProps, INavbarState> 
         return (
             <AppBar position="static">
               <Toolbar>
+              <NavLink to={'/'}> 
                 <Typography variant="h6">Screen Controller</Typography>
+              </NavLink>
                 <IconButton
                   edge="end"
                   color="inherit"
@@ -31,7 +40,12 @@ export default class Navbar extends React.Component<INavbarProps, INavbarState> 
                 >
                     <Menu />
                 </IconButton>
-                <Button color="inherit"> Admin </Button>
+                <NavLink to={'/admin'}> 
+                  <Button color="inherit"> Admin </Button>
+                </NavLink>
+                <NavLink to={'/videos'}> 
+                  <Button color="inherit"> Videos </Button>
+                </NavLink>
               </Toolbar>
             </AppBar>
           );

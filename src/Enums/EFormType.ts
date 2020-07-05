@@ -1,4 +1,4 @@
-export enum EVideoFormType {
+export enum EFormType {
     ADD = "ADD",
     EDIT = "EDIT"
 }

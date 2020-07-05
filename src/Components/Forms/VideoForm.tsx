@@ -12,7 +12,7 @@ import {
   FormHelperText,
   Button
 } from "@material-ui/core";
-import { EVideoFormType } from "../../Enums/EVideoFormType";
+import { EFormType } from '../../Enums/EFormType';
 import { EVideoType } from "../../Enums/EVideoType";
 import RequestManager from "../../Utils/RequestManager";
 import {
@@ -36,7 +36,7 @@ interface IVideoFormState {
   };
 }
 interface IVideoFormProps {
-  type: EVideoFormType;
+  type: EFormType;
   id?: string;
   videos?: IVideo[];
 }
@@ -103,7 +103,7 @@ class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
     this.setState({
       status: EFormStatus.WAITING
     });
-    if (this.props.type === EVideoFormType.ADD) {
+    if (this.props.type === EFormType.ADD) {
       let data: IAddVideoRequestBody = {
         title: this.state.title,
         video_type: this.state.video_type,
@@ -125,7 +125,7 @@ class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
         });
     }
 
-    if (this.props.type === EVideoFormType.EDIT) {
+    if (this.props.type === EFormType.EDIT) {
       let data: IUpdateVideoRequestBody = {
         title: this.state.title,
         video_type: this.state.video_type,
@@ -149,7 +149,7 @@ class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
 
   setVideoState = () => {
     if (
-      this.props.type === EVideoFormType.EDIT &&
+      this.props.type === EFormType.EDIT &&
       this.props.id &&
       this.props.videos &&
       this.state.status === EFormStatus.INIT
@@ -178,7 +178,7 @@ class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
     return (
       <>
         <Typography component="h3">
-          {this.props.type === EVideoFormType.ADD ? "Add Video" : "Edit Video"}
+          {this.props.type === EFormType.ADD ? "Add Video" : "Edit Video"}
         </Typography>
         {this.state.status === EFormStatus.LOADED ? (
           <form onSubmit={this.handleSubmit.bind(this)}>

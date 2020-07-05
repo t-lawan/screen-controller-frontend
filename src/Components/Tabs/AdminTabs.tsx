@@ -6,6 +6,7 @@ import {
   Box
 } from "@material-ui/core";
 import VideoList from "../Lists/VideoList";
+import ScreenList from "../Lists/ScreenList";
 
 interface IAdminTabsState {
   index: number;
@@ -68,7 +69,7 @@ const AdminTabs: React.FC = props => {
     },
     {
       label: "Screens",
-      display: "Screen List"
+      display: (<ScreenList />)
     }
   ];
 
