@@ -17,12 +17,16 @@ export default class RequestManager {
         return await this.get(`${this.baseUrl}/videos`);
     }
 
+    static async getScreens() {
+        return await this.get(`${this.baseUrl}/screens`);
+    }
+
     static async editVideo(data: IUpdateVideoRequestBody) {
         return await this.post(`${this.baseUrl}/video/update`, data);
     }
 
     static async editScreen(data: IUpdateScreenRequestBody) {
-        return await this.post(`${this.baseUrl}/video/update`, data);
+        return await this.post(`${this.baseUrl}/screen/update`, data);
     }
 
     static async deleteVideo(data: IUpdateVideoRequestBody) {

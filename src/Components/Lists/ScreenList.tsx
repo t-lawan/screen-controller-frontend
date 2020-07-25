@@ -6,21 +6,20 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 
 import {
-  OndemandVideoOutlined,
   VideoLabelOutlined,
-  VideocamOutlined,
   EditOutlined,
-  DeleteOutlined
+  DeleteOutlined,
+  PlaylistAdd
 } from "@material-ui/icons";
 import { Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import { IState } from "../../Store/reducer";
 import { openModal } from "../../Store/actions";
-import VideoForm from "../Forms/VideoForm";
 import { EFormType } from '../../Enums/EFormType';
 import { IUpdateScreenRequestBody } from '../../Interfaces/IRequestData';
 import { IScreen } from '../../Interfaces/IScreen';
+import ScreenForm from "../Forms/ScreenForm";
 
 interface IScreenListState {
   screens: IScreen[];
@@ -36,12 +35,18 @@ class ScreenList extends React.Component<IScreenListProps, IScreenListState> {
   }
 
   addScreen = () => {
-    this.props.openModal(<VideoForm type={EFormType.ADD} />);
+    this.props.openModal(<ScreenForm type={EFormType.ADD} />);
   };
+
+  addVideoToPlaylist = (screen: IScreen) => {
+    if (screen) {
+      console.log('SCREEN', screen)
+    }
+  }
 
   editScreen = (id: string | undefined) => {
     if (id) {
-      this.props.openModal(<VideoForm type={EFormType.EDIT} id={id} />);
+      this.props.openModal(<ScreenForm type={EFormType.EDIT} id={id} />);
     }
   };
 
@@ -51,8 +56,6 @@ class ScreenList extends React.Component<IScreenListProps, IScreenListState> {
         ...screen,
         id: screen.id
       };
-    //   await RequestManager. (reqData).then(r => {
-    //   });
     }
   };
   render() {
@@ -70,6 +73,9 @@ class ScreenList extends React.Component<IScreenListProps, IScreenListState> {
               </ListItemIcon>
               <ListItemText primary={scr.local_ip_address} />
               <ListItemSecondaryAction>
+                <Button onClick={() => this.addVideoToPlaylist(scr)}>
+                  <PlaylistAdd />
+                </Button>
                 <Button onClick={() => this.editScreen(scr.id)}>
                   <EditOutlined />
                 </Button>

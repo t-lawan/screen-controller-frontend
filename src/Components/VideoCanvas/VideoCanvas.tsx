@@ -88,7 +88,7 @@ export default class VideoCanvas extends React.Component<
   }
 
   fadeIn = () => {
-      if(this.blur < 100) {
+      if(this.blur > 5) {
         this.blur = this.blur - 5;
       }
     this.updateFilter();
@@ -133,8 +133,8 @@ export default class VideoCanvas extends React.Component<
     }
     this.renderVideoToCanvas()
 
-    if(percent > 0.95) {
-        this.fadeOut()
+    if(percent > 0.90) {
+        this.fadeOut();
     }
 
     if (percent >= 0.99) {

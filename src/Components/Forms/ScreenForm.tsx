@@ -53,7 +53,7 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
     }
   
     componentDidMount() {
-      this.setVideoState();
+      this.setScreenState();
     }
   
     updateStatusToFilling = () => {
@@ -66,13 +66,14 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
     handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target;
       let errors = this.state.errors;
+      console.log(name, value);
       this.setState({
         [name]: value
       });
       switch (name) {
         case "local_ip_address":
           errors.local_ip_address =
-            value.length < 5 ? "Title must be longer than 5 characters" : "";
+            value.length < 11 ? "local_ip_address must be longer than 11 characters" : "";
           break;
         default:
           break;
@@ -118,31 +119,31 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
           });
       }
   
-      if (this.props.type === EFormType.EDIT) {
-        let data: IUpdateScreenRequestBody = {
-          local_ip_address: this.state.local_ip_address,
-          raspberry_pi_id: this.state.raspberry_pi_id,
-          number_of_screens: this.state.number_of_screens,
-          video_file_playlist: this.state.video_file_playlist,
-          screen_type: this.state.screen_type,
-          id: this.state.id
-        };
+      // if (this.props.type === EFormType.EDIT) {
+      //   let data: IUpdateScreenRequestBody = {
+      //     local_ip_address: this.state.local_ip_address,
+      //     raspberry_pi_id: this.state.raspberry_pi_id,
+      //     number_of_screens: this.state.number_of_screens,
+      //     video_file_playlist: this.state.video_file_playlist,
+      //     screen_type: this.state.screen_type,
+      //     id: this.state.id
+      //   };
   
-        await RequestManager.editScreen(data)
-          .then(resp => {
-            this.setState({
-              status: EFormStatus.COMPLETED
-            });
-          })
-          .catch(error => {
-            this.setState({
-              status: EFormStatus.FAILED
-            });
-          });
-      }
+      //   await RequestManager.editScreen(data)
+      //     .then(resp => {
+      //       this.setState({
+      //         status: EFormStatus.COMPLETED
+      //       });
+      //     })
+      //     .catch(error => {
+      //       this.setState({
+      //         status: EFormStatus.FAILED
+      //       });
+      //     });
+      // }
     };
   
-    setVideoState = () => {
+    setScreenState = () => {
       if (
         this.props.type === EFormType.EDIT &&
         this.props.id &&
@@ -152,6 +153,8 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
         let screen = this.props.screens.find(scre => {
           return scre.id === this.props.id;
         });
+
+        console.log('SCREENS', screen)
   
         if (screen) {
           this.setState({
@@ -182,39 +185,46 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
               <FormControl fullWidth>
                 <TextField
                   onChange={this.handleInputChange.bind(this)}
-                  defaultValue={this.state.title}
-                  label="title"
-                  name="title"
+                  defaultValue={this.state.local_ip_address}
+                  label="local ip address"
+                  name="local_ip_address"
                   fullWidth
                   required
                 />
               </FormControl>
               <FormControl fullWidth>
-                <InputLabel id="video_type">Video Type</InputLabel>
+                <TextField
+                  onChange={this.handleInputChange.bind(this)}
+                  defaultValue={this.state.raspberry_pi_id}
+                  label="raspberry pi id"
+                  name="raspberry_pi_id"
+                  type="number"
+                  fullWidth
+                  required
+                />
+              </FormControl>
+              <FormControl fullWidth>
+                <TextField
+                  onChange={this.handleInputChange.bind(this)}
+                  defaultValue={this.state.number_of_screens}
+                  label="number of screens"
+                  name="number_of_screens"
+                  type="number"
+                  fullWidth
+                  required
+                />
+              </FormControl>
+              <FormControl fullWidth>
+                <InputLabel id="screen_type">Screen Type</InputLabel>
                 <Select
-                  labelId="video_type"
-                  value={this.state.type}
-                  name="video_type"
+                  labelId="screen_type"
+                  value={this.state.screen_type}
+                  name="screen_type"
                   onChange={this.handleSelectChange.bind(this)}
                 >
                   <MenuItem value={EScreenType.MASTER}>Master</MenuItem>
                   <MenuItem value={EScreenType.SLAVE}>Slave</MenuItem>
                 </Select>
-              </FormControl>
-              <FormControl fullWidth>
-                <TextField
-                  onChange={this.handleInputChange.bind(this)}
-                  defaultValue={this.state.uri}
-                  label="uri"
-                  name="uri"
-                  required
-                  fullWidth
-                />
-                <FormHelperText>
-                  Please add file name with extension i.e. 'video.mp4' if video
-                  file is selected as a type and add full stream url if stream is
-                  chosen
-                </FormHelperText>
               </FormControl>
   
               <Button type="submit"> Submit </Button>
@@ -238,7 +248,9 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
     return {
       open: state.modal_open,
       component: state.modal_component,
-      videos: state.videos
+      videos: state.videos,
+      screens: state.screens
+
     };
   };
   
