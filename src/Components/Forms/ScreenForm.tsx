@@ -66,7 +66,6 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
     handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target;
       let errors = this.state.errors;
-      console.log(name, value);
       this.setState({
         [name]: value
       });
@@ -153,8 +152,6 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
         let screen = this.props.screens.find(scre => {
           return scre.id === this.props.id;
         });
-
-        console.log('SCREENS', screen)
   
         if (screen) {
           this.setState({

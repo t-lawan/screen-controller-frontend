@@ -20,6 +20,7 @@ import { EFormType } from '../../Enums/EFormType';
 import { IUpdateScreenRequestBody } from '../../Interfaces/IRequestData';
 import { IScreen } from '../../Interfaces/IScreen';
 import ScreenForm from "../Forms/ScreenForm";
+import AddVideoToPlaylistForm from "../Forms/AddVideoToPlaylistForm";
 
 interface IScreenListState {
   screens: IScreen[];
@@ -40,7 +41,7 @@ class ScreenList extends React.Component<IScreenListProps, IScreenListState> {
 
   addVideoToPlaylist = (screen: IScreen) => {
     if (screen) {
-      console.log('SCREEN', screen)
+      this.props.openModal(<AddVideoToPlaylistForm screen={screen} />);
     }
   }
 

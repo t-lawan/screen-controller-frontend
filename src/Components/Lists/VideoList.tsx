@@ -42,7 +42,6 @@ class VideoList extends React.Component<IVideoListProps, IVideoListState> {
 
   componentDidMount() {
     let videos = [...this.props.videos]
-    console.log(videos)
     this.setState({
       videos: videos
     });
@@ -71,7 +70,6 @@ class VideoList extends React.Component<IVideoListProps, IVideoListState> {
     }
   };
   render() {
-    console.log('PROPS', this.props.videos)
     return (
       <>
         <Button onClick={() => this.addVideo()}>

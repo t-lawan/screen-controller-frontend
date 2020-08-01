@@ -10,7 +10,13 @@ import {
   Select,
   MenuItem,
   FormHelperText,
-  Button
+  Button,
+  List,
+  ListItemText,
+  ListItem,
+  Divider,
+  ListItemIcon,
+  ListItemSecondaryAction
 } from "@material-ui/core";
 import { EFormType } from "../../Enums/EFormType";
 import { EVideoType } from "../../Enums/EVideoType";
@@ -19,9 +25,10 @@ import {
   IAddVideoRequestBody,
   IUpdateVideoRequestBody
 } from "../../Interfaces/IRequestData";
-import { EFormStatus } from '../../Enums/EFormStatus';
+import { EFormStatus } from "../../Enums/EFormStatus";
 import { IVideo } from "../../Interfaces/IVideo";
 import { IScreen } from "../../Interfaces/IScreen";
+import { VideocamOffOutlined, OndemandVideoRounded } from "@material-ui/icons";
 
 interface IAddVideoToPlaylistFormState {
   [key: string]: any;
@@ -29,7 +36,7 @@ interface IAddVideoToPlaylistFormState {
 }
 interface IAddVideoToPlaylistFormProps {
   screen: IScreen;
-  videos: IVideo[];
+  videos?: IVideo[];
 }
 class AddVideoToPlaylistForm extends React.Component<
   IAddVideoToPlaylistFormProps,
@@ -38,8 +45,8 @@ class AddVideoToPlaylistForm extends React.Component<
   constructor(props: IAddVideoToPlaylistFormProps) {
     super(props);
     this.state = {
-      video_file_playlist: [],
-      status: EFormStatus.INIT,
+      video_file_playlist: ["VIDEO ONE", "VIDEO TWO"],
+      status: EFormStatus.INIT
     };
   }
 
@@ -89,8 +96,6 @@ class AddVideoToPlaylistForm extends React.Component<
     this.setState({
       status: EFormStatus.WAITING
     });
-
-
   };
 
   setPlaylistState = () => {
@@ -99,9 +104,9 @@ class AddVideoToPlaylistForm extends React.Component<
       this.props.videos &&
       this.state.status === EFormStatus.INIT
     ) {
-        this.setState({
-          video_file_playlist: this.props.screen.video_file_playlist
-        })
+      // this.setState({
+      //   video_file_playlist: this.props.screen.video_file_playlist
+      // });
     }
 
     if (this.state.status === EFormStatus.INIT) {
@@ -111,35 +116,50 @@ class AddVideoToPlaylistForm extends React.Component<
     }
   };
   render() {
+    console.log("STATE", this.state.video_file_playlist);
     return (
       <>
-        <Typography component="h3">
-          {/* {this.props.type === EFormType.ADD ? "Add Video" : "Edit Video"} */}
-        </Typography>
+        <Typography component="h1"> Video List </Typography>
+
+        {this.state.video_file_playlist ? (
+          <List>
+            {this.state.video_file_playlist.map((video, index) => (
+              <>
+                <ListItem key={index}>
+                  <ListItemIcon>
+                    <OndemandVideoRounded />
+                  </ListItemIcon>
+                  <ListItemText primary={video} />
+                  <ListItemSecondaryAction>
+                    
+                  </ListItemSecondaryAction>
+                </ListItem>
+                <Divider />
+              </>
+            ))}
+          </List>
+        ) : null}
+
+        <Typography component="h3">Add video to playlist</Typography>
         {this.state.status === EFormStatus.LOADED ? (
           <form onSubmit={this.handleSubmit.bind(this)}>
-            <FormControl fullWidth>
-              <TextField
-                onChange={this.handleInputChange.bind(this)}
-                defaultValue={this.state.title}
-                label="title"
-                name="title"
-                fullWidth
-                required
-              />
-            </FormControl>
-            <FormControl fullWidth>
-              <InputLabel id="video_type">Video Type</InputLabel>
-              <Select
-                labelId="video_type"
-                value={this.state.type}
-                name="video_type"
-                onChange={this.handleSelectChange.bind(this)}
-              >
-                <MenuItem value={EVideoType.FILE}>Video File</MenuItem>
-                <MenuItem value={EVideoType.STREAM}>Video Stream</MenuItem>
-              </Select>
-            </FormControl>
+            {this.props.videos ? (
+              <FormControl fullWidth>
+                <InputLabel id="video_type">Videos</InputLabel>
+                <Select
+                  labelId="video"
+                  value={this.state.type}
+                  name="video"
+                  onChange={this.handleSelectChange.bind(this)}
+                >
+                  {this.props.videos.map((vid, index) => (
+                    <MenuItem key={index} value={EVideoType.FILE}>
+                      {vid.title}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            ) : null}
             <Button type="submit"> Submit </Button>
           </form>
         ) : null}
