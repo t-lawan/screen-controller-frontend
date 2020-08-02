@@ -8,6 +8,9 @@ import { IScreen } from '../../Interfaces/IScreen';
 import { IAddScreenRequestBody, IUpdateScreenRequestBody } from '../../Interfaces/IRequestData';
 import RequestManager from "../../Utils/RequestManager";
 import { Typography, FormControl, TextField, InputLabel, Select, MenuItem, FormHelperText, Button } from '@material-ui/core';
+import { IPlaylistEntry } from '../../Interfaces/IPlaylistEntry';
+import { addScreen } from '../../Store/actions';
+import { Dispatch } from "redux";
 
 interface IScreenFormState {
     [key: string]: any;
@@ -15,7 +18,7 @@ interface IScreenFormState {
     local_ip_address: string;
     raspberry_pi_id: number;
     number_of_screens: number;
-    video_file_playlist: string[];
+    video_file_playlist: IPlaylistEntry[];
     screen_type: EScreenType;
     status: EFormStatus;
     errors: {
@@ -30,6 +33,7 @@ interface IScreenFormState {
     type: EFormType;
     id?: string;
     screens?: IScreen[];
+    addScreen: Function;
   }
 class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
     constructor(props: IScreenFormProps) {
@@ -105,8 +109,11 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
   
         await RequestManager.addScreen(data)
           .then(response => {
-            // Add new Video To Store
-  
+            // Add new Screen To Store
+            let screen: IScreen = response.data.data;
+            if(screen && this.props.screens){
+              this.props.addScreen(this.props.screens, screen);
+            }
             this.setState({
               status: EFormStatus.COMPLETED
             });
@@ -218,6 +225,7 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
                   value={this.state.screen_type}
                   name="screen_type"
                   onChange={this.handleSelectChange.bind(this)}
+                  defaultValue={EScreenType.MASTER}
                 >
                   <MenuItem value={EScreenType.MASTER}>Master</MenuItem>
                   <MenuItem value={EScreenType.SLAVE}>Slave</MenuItem>
@@ -250,8 +258,14 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
 
     };
   };
+
+  const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+      addScreen: (screens: IScreen[], screen: IScreen) => dispatch(addScreen(screens, screen))
+    };
+  };
   
   export default connect(
     mapStateToProps,
-    null
+    mapDispatchToProps
   )(ScreenForm);

@@ -18,7 +18,6 @@ import {
   ListItemIcon,
   ListItemSecondaryAction
 } from "@material-ui/core";
-import { EFormType } from "../../Enums/EFormType";
 import { EVideoType } from "../../Enums/EVideoType";
 import RequestManager from "../../Utils/RequestManager";
 import {
@@ -28,11 +27,17 @@ import {
 import { EFormStatus } from "../../Enums/EFormStatus";
 import { IVideo } from "../../Interfaces/IVideo";
 import { IScreen } from "../../Interfaces/IScreen";
-import { VideocamOffOutlined, OndemandVideoRounded } from "@material-ui/icons";
+import { OndemandVideoRounded, EditOutlined, DeleteOutlined } from "@material-ui/icons";
+import { IPlaylistEntry } from "../../Interfaces/IPlaylistEntry";
+import styled from "styled-components";
 
+const InputDiv = styled.div`
+  padding: 0.5rem 1rem;
+`;
 interface IAddVideoToPlaylistFormState {
   [key: string]: any;
-  video_file_playlist: string[];
+  video: string;
+  order: number;
 }
 interface IAddVideoToPlaylistFormProps {
   screen: IScreen;
@@ -45,7 +50,8 @@ class AddVideoToPlaylistForm extends React.Component<
   constructor(props: IAddVideoToPlaylistFormProps) {
     super(props);
     this.state = {
-      video_file_playlist: ["VIDEO ONE", "VIDEO TWO"],
+      video: "",
+      order: 0,
       status: EFormStatus.INIT
     };
   }
@@ -63,38 +69,107 @@ class AddVideoToPlaylistForm extends React.Component<
   };
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    let errors = this.state.errors;
+    console.log(name, value);
     this.setState({
       [name]: value
     });
-    switch (name) {
-      case "title":
-        errors.title =
-          value.length < 5 ? "Title must be longer than 5 characters" : "";
-        break;
-      case "uri":
-        errors.title =
-          value.length < 5 ? "Title must be longer than 5 characters" : "";
-        break;
-      default:
-        break;
+  };
+
+  getVideoName = (id: string | undefined): string => {
+    let name: string = "Untitled";
+    if (this.props.videos && id) {
+      let video = this.props.videos.find(vid => {
+        return vid.id === id;
+      });
+      if (video) {
+        name = video.title;
+      }
     }
-    this.setState({
-      errors: errors
-    });
+
+    return name;
   };
 
   handleSelectChange = event => {
     const { name, value } = event.target;
-    this.setState({
-      [name]: value
+    if (this.props.videos) {
+      let video = this.props.videos.find(vid => {
+        return (vid.id = value);
+      });
+      if (video) {
+        this.setState({
+          video: value
+        });
+      }
+    }
+  };
+
+  calculateMaxOrder = () => {
+    let orders = this.props.screen.video_file_playlist.map(playlistEntry => {
+      return playlistEntry.order;
     });
+    let max = 10;
+    if (orders.length > 0) {
+      max = Math.max(...orders) + 10;
+    }
+    return max;
+  };
+
+  orderExists = (order: number) => {
+    let i = this.props.screen.video_file_playlist.find(playlistEntry => {
+      return playlistEntry.order === order;
+    });
+
+    return i ? true : false;
   };
 
   handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (this.state.video) {
+      this.setState({
+        status: EFormStatus.WAITING
+      });
+      let order = this.state.order;
+      if (order === 0) {
+        order = this.calculateMaxOrder();
+      }
+
+      if (this.orderExists(order)) {
+        let playlistEntry: IPlaylistEntry = {
+          id: this.state.video,
+          order: order
+        };
+
+        this.props.screen.video_file_playlist = [
+          ...this.props.screen.video_file_playlist,
+          playlistEntry
+        ];
+        if (this.props.screen.id) {
+          await RequestManager.editScreen({
+            ...this.props.screen,
+            id: this.props.screen.id
+          })
+            .then(response => {
+              let screen: IScreen = response.data.data;
+              if (screen) {
+                // add screen to strore
+              }
+              this.setState({
+                status: EFormStatus.COMPLETED
+              });
+            })
+            .catch(error => {
+              this.formFailed();
+            });
+        }
+      } else {
+        this.formFailed();
+      }
+    }
+  };
+
+  formFailed = () => {
     this.setState({
-      status: EFormStatus.WAITING
+      status: EFormStatus.FAILED
     });
   };
 
@@ -116,27 +191,55 @@ class AddVideoToPlaylistForm extends React.Component<
     }
   };
   render() {
-    console.log("STATE", this.state.video_file_playlist);
+    console.log("SCREEN", this.props.screen);
+
+    let videos: IVideo[] = [];
+    if (this.props.videos) {
+      videos = this.props.videos.filter(vid => {
+        let containsVideo = this.props.screen.video_file_playlist.find(
+          entry => {
+            return entry.id == vid.id;
+          }
+        );
+
+        return containsVideo ? false : true;
+      });
+    }
+
+    console.log("VIDEOS", videos);
     return (
       <>
-        <Typography component="h1"> Video List </Typography>
+        <Typography component="h1"> Video Playlist </Typography>
 
-        {this.state.video_file_playlist ? (
+        {this.props.screen.video_file_playlist ? (
           <List>
-            {this.state.video_file_playlist.map((video, index) => (
-              <>
-                <ListItem key={index}>
-                  <ListItemIcon>
-                    <OndemandVideoRounded />
-                  </ListItemIcon>
-                  <ListItemText primary={video} />
-                  <ListItemSecondaryAction>
-                    
-                  </ListItemSecondaryAction>
-                </ListItem>
-                <Divider />
-              </>
-            ))}
+            {this.props.screen.video_file_playlist
+              .sort((a, b) => a.order - b.order)
+              .map((video, index) => (
+                <>
+                  <ListItem key={index}>
+                    <ListItemText primary={this.getVideoName(video.id)} />
+
+                    <InputDiv>
+                      <TextField
+                        type="number"
+                        size="small"
+                        margin="normal"
+                        defaultValue={video.order}
+                      />
+                    </InputDiv>
+                    {/* <ListItemSecondaryAction> */}
+                      <Button onClick={() => {}}>
+                        <EditOutlined />
+                      </Button>
+                      <Button onClick={() => {}}>
+                        <DeleteOutlined />
+                      </Button>
+                    {/* </ListItemSecondaryAction> */}
+                  </ListItem>
+                  <Divider />
+                </>
+              ))}
           </List>
         ) : null}
 
@@ -144,23 +247,36 @@ class AddVideoToPlaylistForm extends React.Component<
         {this.state.status === EFormStatus.LOADED ? (
           <form onSubmit={this.handleSubmit.bind(this)}>
             {this.props.videos ? (
-              <FormControl fullWidth>
-                <InputLabel id="video_type">Videos</InputLabel>
-                <Select
-                  labelId="video"
-                  value={this.state.type}
-                  name="video"
-                  onChange={this.handleSelectChange.bind(this)}
-                >
-                  {this.props.videos.map((vid, index) => (
-                    <MenuItem key={index} value={EVideoType.FILE}>
-                      {vid.title}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <>
+                <FormControl fullWidth>
+                  <InputLabel id="video_type">Videos</InputLabel>
+                  <Select
+                    labelId="video"
+                    value={this.state.video}
+                    name="video"
+                    onChange={this.handleSelectChange.bind(this)}
+                  >
+                    {videos.map((vid, index) => (
+                      <MenuItem key={index} value={vid.id}>
+                        {vid.title}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                  <TextField
+                    label="order"
+                    name="order"
+                    type="number"
+                    defaultValue={this.calculateMaxOrder()}
+                    onChange={this.handleInputChange.bind(this)}
+                    fullWidth
+                    required
+                  />
+                </FormControl>
+              </>
             ) : null}
-            <Button type="submit"> Submit </Button>
+            <Button type="submit"> Add Video </Button>
           </form>
         ) : null}
         {this.state.status === EFormStatus.WAITING ? (

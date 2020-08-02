@@ -1,7 +1,14 @@
 import { IVideo } from "../Interfaces/IVideo";
 import { IScreen } from "../Interfaces/IScreen";
 import { AnyAction } from "redux";
-import { OPEN_MODAL, CLOSE_MODAL, SET_VIDEOS, SET_SCREENS } from './actions';
+import { UPDATE_SCREENS } from './actions';
+import {
+  OPEN_MODAL,
+  CLOSE_MODAL,
+  SET_VIDEOS,
+  SET_SCREENS,
+  UPDATE_VIDEOS
+} from "./actions";
 export interface IState {
   screens: IScreen[];
   videos: IVideo[];
@@ -35,6 +42,17 @@ export const reducer = (state: IState = initalState, action: AnyAction) => {
         ...state,
         modal_open: true,
         modal_component: action.component
+      };
+    case UPDATE_VIDEOS:
+      return {
+        ...state,
+        videos: action.videos
+      };
+
+    case UPDATE_SCREENS:
+      return {
+        ...state,
+        screens: action.screens
       };
     case CLOSE_MODAL:
       return {

@@ -43,9 +43,6 @@ export default class Navbar extends React.Component<INavbarProps, INavbarState> 
                 <NavLink to={'/admin'}> 
                   <Button color="inherit"> Admin </Button>
                 </NavLink>
-                <NavLink to={'/videos'}> 
-                  <Button color="inherit"> Videos </Button>
-                </NavLink>
               </Toolbar>
             </AppBar>
           );

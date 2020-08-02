@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { reducer } from './Store/reducer';
 import Home from './Pages/Home/Home';
 import Admin from './Pages/Admin/Admin';
-import Videos from './Pages/Videos/Videos';
 
 
 
@@ -26,7 +25,6 @@ const App: React.FC = () => {
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/admin" exact component={Admin} />
-          <Route path="/videos" exact component={Videos} />
         </Switch>
       </Router>
     </Provider>

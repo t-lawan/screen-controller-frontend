@@ -21,6 +21,7 @@ import {
 } from "../../Interfaces/IRequestData";
 import { EFormStatus } from "../../Enums/EFormStatus";
 import { IVideo } from "../../Interfaces/IVideo";
+import { addVideo } from '../../Store/actions';
 
 interface IVideoFormState {
   [key: string]: any;
@@ -39,6 +40,7 @@ interface IVideoFormProps {
   type: EFormType;
   id?: string;
   videos?: IVideo[];
+  addVideo: Function;
 }
 class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
   constructor(props: IVideoFormProps) {
@@ -113,7 +115,10 @@ class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
       await RequestManager.addVideo(data)
         .then(response => {
           // Add new Video To Store
-
+          let video: IVideo = response.data.data;
+          if(video && this.props.videos){
+            this.props.addVideo(this.props.videos, video)
+          }
           this.setState({
             status: EFormStatus.COMPLETED
           });
@@ -199,6 +204,7 @@ class VideoForm extends React.Component<IVideoFormProps, IVideoFormState> {
                 value={this.state.type}
                 name="video_type"
                 onChange={this.handleSelectChange.bind(this)}
+                defaultValue={EVideoType.FILE}
               >
                 <MenuItem value={EVideoType.FILE}>Video File</MenuItem>
                 <MenuItem value={EVideoType.STREAM}>Video Stream</MenuItem>
@@ -245,7 +251,13 @@ const mapStateToProps = (state: IState) => {
   };
 };
 
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    addVideo: (videos: IVideo[], video: IVideo) => dispatch(addVideo(videos, video))
+  };
+};
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(VideoForm);
