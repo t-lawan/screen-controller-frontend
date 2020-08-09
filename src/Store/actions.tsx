@@ -51,6 +51,21 @@ export const addScreen = (screens: IScreen[], screen: IScreen) => {
     } 
 }
 
+export const updateScreen = (screens: IScreen[], screen: IScreen) => {
+    let updatedScreens: IScreen[] = screens;
+    let index = updatedScreens.findIndex((scr) => {
+        return scr.id === screen.id
+    })
+    if(index) {
+        updatedScreens.splice(index, 1);
+        updatedScreens.push(screen);
+    }
+    return {
+        type: UPDATE_SCREENS,
+        screens: updatedScreens
+    } 
+}
+
 export const setScreens = (screens: IScreen[]) => {
     return {
         type: SET_SCREENS,

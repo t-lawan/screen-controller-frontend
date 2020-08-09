@@ -85,7 +85,7 @@ const VideoTabs: React.FC = props => {
       </Tabs>
       {tbs.map((tb, index) => (
         <TabPanel key={index} value={value} index={index}>
-          <VideoPlayer videoUrl={'https://dt8c09yje207j.cloudfront.net/Jenna+Sutela_Holobiont_2018.mov'} />
+          <VideoPlayer videoUrl={'http://admin:false.memory@192.168.0.25/ISAPI/Streaming/channels/102/httpPreview'} />
         </TabPanel>
       ))}
 

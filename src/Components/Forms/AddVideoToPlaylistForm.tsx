@@ -16,20 +16,25 @@ import {
   ListItem,
   Divider,
   ListItemIcon,
-  ListItemSecondaryAction
+  ListItemSecondaryAction,
+  Paper,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell
 } from "@material-ui/core";
 import { EVideoType } from "../../Enums/EVideoType";
 import RequestManager from "../../Utils/RequestManager";
-import {
-  IAddVideoRequestBody,
-  IUpdateVideoRequestBody
-} from "../../Interfaces/IRequestData";
 import { EFormStatus } from "../../Enums/EFormStatus";
 import { IVideo } from "../../Interfaces/IVideo";
 import { IScreen } from "../../Interfaces/IScreen";
-import { OndemandVideoRounded, EditOutlined, DeleteOutlined } from "@material-ui/icons";
+import {
+  DeleteOutlined
+} from "@material-ui/icons";
 import { IPlaylistEntry } from "../../Interfaces/IPlaylistEntry";
 import styled from "styled-components";
+import { updateScreen } from '../../Store/actions';
 
 const InputDiv = styled.div`
   padding: 0.5rem 1rem;
@@ -38,10 +43,13 @@ interface IAddVideoToPlaylistFormState {
   [key: string]: any;
   video: string;
   order: number;
+  playlist: IPlaylistEntry[]
 }
 interface IAddVideoToPlaylistFormProps {
   screen: IScreen;
   videos?: IVideo[];
+  screens?: IScreen[];
+  updateScreen: Function;
 }
 class AddVideoToPlaylistForm extends React.Component<
   IAddVideoToPlaylistFormProps,
@@ -52,7 +60,8 @@ class AddVideoToPlaylistForm extends React.Component<
     this.state = {
       video: "",
       order: 0,
-      status: EFormStatus.INIT
+      status: EFormStatus.INIT,
+      playlist: []
     };
   }
 
@@ -69,7 +78,6 @@ class AddVideoToPlaylistForm extends React.Component<
   };
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    console.log(name, value);
     this.setState({
       [name]: value
     });
@@ -104,7 +112,7 @@ class AddVideoToPlaylistForm extends React.Component<
   };
 
   calculateMaxOrder = () => {
-    let orders = this.props.screen.video_file_playlist.map(playlistEntry => {
+    let orders = this.state.playlist.map(playlistEntry => {
       return playlistEntry.order;
     });
     let max = 10;
@@ -115,7 +123,7 @@ class AddVideoToPlaylistForm extends React.Component<
   };
 
   orderExists = (order: number) => {
-    let i = this.props.screen.video_file_playlist.find(playlistEntry => {
+    let i = this.state.playlist.find(playlistEntry => {
       return playlistEntry.order === order;
     });
 
@@ -133,25 +141,32 @@ class AddVideoToPlaylistForm extends React.Component<
         order = this.calculateMaxOrder();
       }
 
-      if (this.orderExists(order)) {
+      if (!this.orderExists(order)) {
         let playlistEntry: IPlaylistEntry = {
           id: this.state.video,
           order: order
         };
 
-        this.props.screen.video_file_playlist = [
-          ...this.props.screen.video_file_playlist,
-          playlistEntry
-        ];
-        if (this.props.screen.id) {
+        let playlist = [...this.state.playlist, playlistEntry]
+
+        this.setState({
+          playlist: playlist
+        })
+
+        let screen: IScreen = {
+          ...this.props.screen,
+          video_file_playlist: playlist
+        }
+        if (screen.id) {
           await RequestManager.editScreen({
-            ...this.props.screen,
-            id: this.props.screen.id
+            ...screen,
+            id: screen.id
           })
             .then(response => {
               let screen: IScreen = response.data.data;
               if (screen) {
                 // add screen to strore
+                this.props.updateScreen(this.props.screens, screen)
               }
               this.setState({
                 status: EFormStatus.COMPLETED
@@ -167,6 +182,18 @@ class AddVideoToPlaylistForm extends React.Component<
     }
   };
 
+  removeEntry = async (videoId: string) => {
+    let index = this.state.playlist.findIndex((entry) =>{
+      return entry.id === videoId; 
+    })
+
+    let array: IPlaylistEntry[] = this.state.playlist;
+    array.splice(index, 1)
+    this.setState({
+      playlist: array
+    })
+  }
+
   formFailed = () => {
     this.setState({
       status: EFormStatus.FAILED
@@ -179,9 +206,10 @@ class AddVideoToPlaylistForm extends React.Component<
       this.props.videos &&
       this.state.status === EFormStatus.INIT
     ) {
-      // this.setState({
-      //   video_file_playlist: this.props.screen.video_file_playlist
-      // });
+      console.log('HELLO')
+      this.setState({
+        playlist: this.props.screen.video_file_playlist
+      });
     }
 
     if (this.state.status === EFormStatus.INIT) {
@@ -191,12 +219,11 @@ class AddVideoToPlaylistForm extends React.Component<
     }
   };
   render() {
-    console.log("SCREEN", this.props.screen);
 
     let videos: IVideo[] = [];
     if (this.props.videos) {
       videos = this.props.videos.filter(vid => {
-        let containsVideo = this.props.screen.video_file_playlist.find(
+        let containsVideo = this.state.playlist.find(
           entry => {
             return entry.id == vid.id;
           }
@@ -205,42 +232,49 @@ class AddVideoToPlaylistForm extends React.Component<
         return containsVideo ? false : true;
       });
     }
-
-    console.log("VIDEOS", videos);
     return (
       <>
         <Typography component="h1"> Video Playlist </Typography>
 
-        {this.props.screen.video_file_playlist ? (
-          <List>
-            {this.props.screen.video_file_playlist
-              .sort((a, b) => a.order - b.order)
-              .map((video, index) => (
-                <>
-                  <ListItem key={index}>
-                    <ListItemText primary={this.getVideoName(video.id)} />
-
-                    <InputDiv>
-                      <TextField
-                        type="number"
-                        size="small"
-                        margin="normal"
-                        defaultValue={video.order}
-                      />
-                    </InputDiv>
-                    {/* <ListItemSecondaryAction> */}
-                      <Button onClick={() => {}}>
-                        <EditOutlined />
-                      </Button>
-                      <Button onClick={() => {}}>
-                        <DeleteOutlined />
-                      </Button>
-                    {/* </ListItemSecondaryAction> */}
-                  </ListItem>
-                  <Divider />
-                </>
-              ))}
-          </List>
+        {this.state.playlist ? (
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Title</TableCell>
+                  <TableCell>Order</TableCell>
+                  <TableCell>Delete</TableCell>
+                </TableRow>
+              </TableHead>
+              {this.state.playlist
+                .sort((a, b) => a.order - b.order)
+                .map((video, index) => (
+                  <>
+                    <TableRow key={index}>
+                      <TableCell component="th" scope="row">
+                        {this.getVideoName(video.id)}
+                      </TableCell>
+                      <TableCell align="right">
+                        <InputDiv>
+                          <TextField
+                            type="number"
+                            size="small"
+                            margin="normal"
+                            value={video.order}
+                            defaultValue={video.order}
+                          />
+                        </InputDiv>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button onClick={() => this.removeEntry(video.id)}>
+                          <DeleteOutlined />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  </>
+                ))}
+            </Table>
+          </TableContainer>
         ) : null}
 
         <Typography component="h3">Add video to playlist</Typography>
@@ -286,7 +320,7 @@ class AddVideoToPlaylistForm extends React.Component<
           <h2> Request Failed </h2>
         ) : null}
         {this.state.status === EFormStatus.COMPLETED ? (
-          <h2> {this.state.title} was successfully added </h2>
+          <h2> {this.state.video} was successfully added </h2>
         ) : null}
       </>
     );
@@ -297,11 +331,18 @@ const mapStateToProps = (state: IState) => {
   return {
     open: state.modal_open,
     component: state.modal_component,
-    videos: state.videos
+    videos: state.videos,
+    screens: state.screens,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    updateScreen: (screens: IScreen[], screen: IScreen) => dispatch(updateScreen(screens, screen))
   };
 };
 
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(AddVideoToPlaylistForm);
