@@ -1,4 +1,5 @@
 export enum EWSClientType {
-    CONTROLLER = "CONTROLLER",
-    DISPLAY = "DISPLAY" 
+    ADMIN = "ADMIN",
+    DISPLAY = "DISPLAY",
+    MASTER = "MASTER" 
 }

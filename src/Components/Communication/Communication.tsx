@@ -31,7 +31,7 @@ class Communication extends React.Component<
   componentDidMount() {
     this.ws.onopen = event => {
         const message: IWebsocketMessage = {
-            client_type: EWSClientType.CONTROLLER,
+            client_type: EWSClientType.ADMIN,
             message: EWSMessageType.INITIALISE,
             raspberry_pi_id: 0
         }
