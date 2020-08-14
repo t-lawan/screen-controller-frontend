@@ -1,7 +1,7 @@
 import { IVideo } from "../Interfaces/IVideo";
 import { IScreen } from "../Interfaces/IScreen";
 import { AnyAction } from "redux";
-import { UPDATE_SCREENS } from './actions';
+import { UPDATE_SCREENS, SEND_MESSAGE, SEND_MESSAGE_COMPLETE } from './actions';
 import {
   OPEN_MODAL,
   CLOSE_MODAL,
@@ -15,6 +15,8 @@ export interface IState {
   modal_open: boolean;
   modal_component: any;
   hasLoaded: false;
+  ws_message: string;
+  ws_message_sent: boolean;
 }
 
 const initalState: IState = {
@@ -22,7 +24,9 @@ const initalState: IState = {
   videos: [],
   modal_open: false,
   modal_component: null,
-  hasLoaded: false
+  hasLoaded: false,
+  ws_message: "",
+  ws_message_sent: false
 };
 
 export const reducer = (state: IState = initalState, action: AnyAction) => {
@@ -48,7 +52,6 @@ export const reducer = (state: IState = initalState, action: AnyAction) => {
         ...state,
         videos: action.videos
       };
-
     case UPDATE_SCREENS:
       return {
         ...state,
@@ -58,6 +61,18 @@ export const reducer = (state: IState = initalState, action: AnyAction) => {
       return {
         ...state,
         modal_open: false
+      };
+    case SEND_MESSAGE:
+      return {
+        ...state,
+        ws_message: action.ws_message,
+        ws_message_sent: action.ws_message_sent
+      };
+    case SEND_MESSAGE_COMPLETE:
+      return {
+        ...state,
+        ws_message: action.ws_message,
+        ws_message_sent: action.ws_message_sent
       };
     default:
       return state;

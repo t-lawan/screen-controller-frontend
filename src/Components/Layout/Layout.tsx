@@ -4,6 +4,7 @@ import Navbar from "../Navbar/Navbar";
 import { Helmet } from "react-helmet";
 import FormModal from "../Modal/FormModal";
 import State from "../State/State";
+import Communication from "../Communication/Communication";
 
 interface LayoutProps {
   children: any;
@@ -17,6 +18,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
 
       </Helmet>
       <State />
+      <Communication />
       <Container>
         <FormModal />
         <Navbar />

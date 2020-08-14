@@ -1,12 +1,11 @@
 import * as React from "react";
-import {
-  Typography,
-  Tabs,
-  Tab,
-  Box
-} from "@material-ui/core";
+import { Typography, Tabs, Tab, Box, Button, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
+import styled from 'styled-components';
 
+const StyledImage = styled.img`
+  width: 100%;
+`
 interface IVideoTabsState {
   index: number;
 }
@@ -85,10 +84,14 @@ const VideoTabs: React.FC = props => {
       </Tabs>
       {tbs.map((tb, index) => (
         <TabPanel key={index} value={value} index={index}>
-          <VideoPlayer videoUrl={'http://admin:false.memory@192.168.0.25/ISAPI/Streaming/channels/102/httpPreview'} />
+          {/* <VideoPlayer
+            videoUrl={
+              "http://admin:false.memory@192.168.0.25/ISAPI/Streaming/channels/102/httpPreview"
+            }
+          /> */}
+          <StyledImage src={"http://admin:false.memory@192.168.0.25/ISAPI/Streaming/channels/102/httpPreview"} />
         </TabPanel>
       ))}
-
     </>
   );
 };
