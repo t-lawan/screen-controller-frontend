@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { IState } from "../../Store/reducer";
 import { Dispatch } from "redux";
-import { sendMessageComplete } from '../../Store/actions';
+import { sendMessageComplete, sendMessage } from '../../Store/actions';
 import { IWebsocketMessage } from '../../Interfaces/IRequestData';
 import { EWSClientType } from "../../Enums/EWSClientType";
 import { EWSMessageType } from "../../Enums/EWSMessageType";
@@ -13,6 +13,7 @@ interface ICommunicationProps {
   [key: string]: any;
   ws_message: string;
   ws_message_sent: boolean;
+  sendMessage: Function;
   sendMessageComplete: Function;
 }
 
@@ -39,6 +40,20 @@ class Communication extends React.Component<
         let string = JSON.stringify(message);
         this.ws.send(string)
     };
+
+    this.ws.onmessage = event => {
+      let message: IWebsocketMessage = JSON.parse(event.data);
+
+      switch (message.message){
+        case EWSMessageType.START_AUDIO:
+          console.log('START AUDIO');
+          this.props.sendMessage(event.data);
+          break;
+        default:
+          console.log('NO ACTION');
+          break;
+      }
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -68,7 +83,9 @@ const mapStateToProps = (state: IState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        sendMessageComplete: () => dispatch(sendMessageComplete())
+        sendMessageComplete: () => dispatch(sendMessageComplete()),
+        sendMessage: (message: string) => dispatch(sendMessage(message))
+
     };
   };
 
