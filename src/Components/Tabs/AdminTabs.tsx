@@ -7,6 +7,7 @@ import {
 } from "@material-ui/core";
 import VideoList from "../Lists/VideoList";
 import ScreenList from "../Lists/ScreenList";
+import Controls from "../Controls/Controls";
 
 interface IAdminTabsState {
   index: number;
@@ -70,6 +71,10 @@ const AdminTabs: React.FC = props => {
     {
       label: "Screens",
       display: (<ScreenList />)
+    },
+    {
+      label: "Controls",
+      display: (<Controls />)
     }
   ];
 

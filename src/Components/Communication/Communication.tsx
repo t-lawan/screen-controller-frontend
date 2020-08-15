@@ -38,13 +38,12 @@ class Communication extends React.Component<
 
         let string = JSON.stringify(message);
         this.ws.send(string)
-      console.log("CONNECTED", event);
     };
   }
 
   componentDidUpdate(prevProps) {
-      if((prevProps.ws_message_sent !== this.props.ws_message_sent) && this.props.ws_message_sent) {
-
+      if(this.props.ws_message_sent && (prevProps.ws_message_sent !== this.props.ws_message_sent)) {
+        this.sendMessage()
       }
   }
 
