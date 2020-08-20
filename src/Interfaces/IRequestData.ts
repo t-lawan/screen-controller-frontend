@@ -24,6 +24,11 @@ export interface IUpdateVideoRequestBody {
     video_type: EVideoType
 }
 
+export interface IAddAudioRequestBody {
+    title: string;
+    uri: string;
+}
+
 export interface IUpdateScreenRequestBody {
     id: string; 
     local_ip_address: string;

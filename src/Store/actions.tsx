@@ -1,9 +1,17 @@
 import { IVideo } from '../Interfaces/IVideo';
 import { IScreen } from '../Interfaces/IScreen';
+import { IAudio } from '../Interfaces/IAudio';
+
 export const SET_VIDEOS = 'SET_VIDEOS';
 export const UPDATE_VIDEOS = 'UPDATE_VIDEOS';
+
 export const SET_SCREENS = 'SET_SCREENS';
 export const UPDATE_SCREENS = 'UPDATE_SCREENS';
+
+export const SET_AUDIO = 'SET_AUDIO';
+export const UPDATE_AUDIO = 'UPDATE_AUDIO';
+
+
 
 export const HAS_LOADED = 'HAS_LOADED';
 export const OPEN_MODAL = "OPEN_MODAL";
@@ -20,6 +28,7 @@ export const sendMessage = (message: string) => {
 
     }
 }
+
 export const sendMessageComplete = () => {
     return  {
         type: SEND_MESSAGE_COMPLETE,
@@ -59,6 +68,21 @@ export const addVideo = (videos: IVideo[], video: IVideo) => {
     return {
         type: UPDATE_VIDEOS,
         videos: updatedVideos
+    } 
+}
+
+export const setAudio = (audio: IAudio[]) => {
+    return {
+        type: SET_AUDIO,
+        audio: audio
+    }
+}
+
+export const addAudio = (audio_list: IAudio[], audio: IAudio) => {
+    let updatedVideos: IAudio[] = [...audio_list, audio];
+    return {
+        type: UPDATE_AUDIO,
+        audio: updatedVideos
     } 
 }
 

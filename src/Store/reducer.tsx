@@ -1,7 +1,14 @@
 import { IVideo } from "../Interfaces/IVideo";
 import { IScreen } from "../Interfaces/IScreen";
 import { AnyAction } from "redux";
-import { UPDATE_SCREENS, SEND_MESSAGE, SEND_MESSAGE_COMPLETE } from './actions';
+import {
+  UPDATE_SCREENS,
+  SEND_MESSAGE,
+  SEND_MESSAGE_COMPLETE,
+  SET_AUDIO
+} from "./actions";
+import { IAudio } from "../Interfaces/IAudio";
+import { UPDATE_AUDIO } from './actions';
 import {
   OPEN_MODAL,
   CLOSE_MODAL,
@@ -12,6 +19,7 @@ import {
 export interface IState {
   screens: IScreen[];
   videos: IVideo[];
+  audio: IAudio[];
   modal_open: boolean;
   modal_component: any;
   hasLoaded: false;
@@ -22,6 +30,7 @@ export interface IState {
 const initalState: IState = {
   screens: [],
   videos: [],
+  audio: [],
   modal_open: false,
   modal_component: null,
   hasLoaded: false,
@@ -41,6 +50,11 @@ export const reducer = (state: IState = initalState, action: AnyAction) => {
         ...state,
         videos: action.videos
       };
+    case SET_AUDIO:
+      return {
+        ...state,
+        audio: action.audio
+      };
     case OPEN_MODAL:
       return {
         ...state,
@@ -51,6 +65,11 @@ export const reducer = (state: IState = initalState, action: AnyAction) => {
       return {
         ...state,
         videos: action.videos
+      };
+    case UPDATE_AUDIO:
+      return {
+        ...state,
+        audio: action.audio
       };
     case UPDATE_SCREENS:
       return {

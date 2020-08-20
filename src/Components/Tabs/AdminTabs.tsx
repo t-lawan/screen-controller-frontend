@@ -8,6 +8,7 @@ import {
 import VideoList from "../Lists/VideoList";
 import ScreenList from "../Lists/ScreenList";
 import Controls from "../Controls/Controls";
+import AudioList from "../Lists/AudioList";
 
 interface IAdminTabsState {
   index: number;
@@ -73,9 +74,14 @@ const AdminTabs: React.FC = props => {
       display: (<ScreenList />)
     },
     {
+      label: "Audio",
+      display: (<AudioList />)
+    },
+    {
       label: "Controls",
       display: (<Controls />)
-    }
+    },
+
   ];
 
   return (
