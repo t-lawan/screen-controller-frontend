@@ -26,6 +26,10 @@ export default class RequestManager {
         return await this.get(`${this.baseUrl}/screens`);
     }
 
+    static async getAudio() {
+        return await this.get(`${this.baseUrl}/audio`);
+    }
+
     static async editVideo(data: IUpdateVideoRequestBody) {
         return await this.post(`${this.baseUrl}/video/update`, data);
     }
