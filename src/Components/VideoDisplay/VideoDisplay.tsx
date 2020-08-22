@@ -9,11 +9,14 @@ import { EWSClientType } from "../../Enums/EWSClientType";
 import { EWSMessageType } from "../../Enums/EWSMessageType";
 import styled from "styled-components";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
-import { triggerAsyncId } from "async_hooks";
 
-const VideoDisplayWrapper = styled.div`
+type TVideoDisplayWrapper = {
+    isDisplay: boolean
+  };
+const VideoDisplayWrapper = styled.div<TVideoDisplayWrapper>`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: ${(props) => props.isDisplay ? 'repeat(3, 1fr)' : '1fr'};
+
   min-height: 90vh;
 `;
 
@@ -67,18 +70,19 @@ class VideoDisplay extends React.Component<
     return percent * this.state.wrapperHeight;
   }
 
-  onLoad = () => {
+  showVideos = () => {
     if (this.state.wrapperHeight === 1) {
       this.setState({
         wrapperHeight: this.wrapperRef.current.offsetHeight - 20,
         wrapperWidth: this.wrapperRef.current.offsetWidth / 3,
+        showVideos: true
       });
     }
   };
   render() {
     return (
       <VideoDisplayWrapper
-        onMouseDown={() => this.onLoad()}
+        isDisplay={this.state.showVideos}
         ref={this.wrapperRef}
       >
         {this.state.showVideos ? (
@@ -140,7 +144,7 @@ class VideoDisplay extends React.Component<
             </Column>
           </React.Fragment>
         ) : (
-          <p> Button</p>
+          <Button onClick={() => this.showVideos()} variant="contained"> Show Video Layout</Button>
         )}
       </VideoDisplayWrapper>
     );
