@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { IAddVideoRequestBody, IUpdateVideoRequestBody, IAddScreenRequestBody, IUpdateScreenRequestBody } from '../Interfaces/IRequestData';
+import { IAddVideoRequestBody, IUpdateVideoRequestBody, IAddScreenRequestBody, IUpdateScreenRequestBody, IAddAudioRequestBody } from '../Interfaces/IRequestData';
+import { IAudio } from '../Interfaces/IAudio';
 
 
 export default class RequestManager {
@@ -13,6 +14,10 @@ export default class RequestManager {
         return await this.post(`${this.baseUrl}/screen/create`, data);
     }
 
+    static async addAudio(data: IAddAudioRequestBody) {
+        return await this.post(`${this.baseUrl}/audio/create`, data);
+    }
+
     static async getVideos() {
         return await this.get(`${this.baseUrl}/videos`);
     }
@@ -21,8 +26,16 @@ export default class RequestManager {
         return await this.get(`${this.baseUrl}/screens`);
     }
 
+    static async getAudio() {
+        return await this.get(`${this.baseUrl}/audio`);
+    }
+
     static async editVideo(data: IUpdateVideoRequestBody) {
         return await this.post(`${this.baseUrl}/video/update`, data);
+    }
+
+    static async editAudio(data: IAudio) {
+        return await this.post(`${this.baseUrl}/audio/update`, data);
     }
 
     static async editScreen(data: IUpdateScreenRequestBody) {
