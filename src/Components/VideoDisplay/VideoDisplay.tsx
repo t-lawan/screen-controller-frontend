@@ -16,13 +16,12 @@ type TVideoDisplayWrapper = {
 const VideoDisplayWrapper = styled.div<TVideoDisplayWrapper>`
   display: grid;
   grid-template-columns: ${(props) => props.isDisplay ? 'repeat(3, 1fr)' : '1fr'};
-
+  border: 1px solid black;
   min-height: 90vh;
 `;
 
 const Column = styled.div`
-  background: pink;
-  border: 1px solid black;
+  background: 'white';
   display: flex;
   flex-direction: column;
 `;
@@ -31,7 +30,6 @@ type TVideoWrapper = {
   height?: string;
 };
 const VideoWrapper = styled.div<TVideoWrapper>`
-  background: ${(props) => props.background};
   height: ${(props) => props.height};
   display: flex;
   flex-direction: column;
@@ -42,6 +40,8 @@ interface IVideoDisplayState {
   wrapperHeight: number;
   wrapperWidth: number;
   showVideos: boolean;
+  playVideos: boolean;
+
 }
 
 interface IVideoDisplayProps {
@@ -62,6 +62,7 @@ class VideoDisplay extends React.Component<
       wrapperHeight: 1,
       wrapperWidth: 1,
       showVideos: false,
+      playVideos: false
     };
   }
   wrapperRef;
@@ -70,6 +71,17 @@ class VideoDisplay extends React.Component<
     return percent * this.state.wrapperHeight;
   }
 
+  playVideos = () => {
+    if(!this.state.playVideos) {
+      this.setState({
+        playVideos: true
+      })
+    } else {
+      this.setState({
+        playVideos: false
+      })
+    }
+  }
   showVideos = () => {
     if (this.state.wrapperHeight === 1) {
       this.setState({
@@ -87,10 +99,11 @@ class VideoDisplay extends React.Component<
       >
         {this.state.showVideos ? (
           <React.Fragment>
-            <Column>
+            <Column onClick={() => this.playVideos()}>
               <VideoWrapper background="orange" height="35%">
                 {" "}
                 <VideoPlayer
+                  isPlaying={this.state.playVideos}
                   width={this.state.wrapperWidth}
                   height={this.calculateHeight(0.35)}
                 />
@@ -98,6 +111,7 @@ class VideoDisplay extends React.Component<
               <VideoWrapper background="yellow" height="65%">
                 {" "}
                 <VideoPlayer
+                  isPlaying={this.state.playVideos}
                   width={this.state.wrapperWidth}
                   height={this.calculateHeight(0.65)}
                 />
@@ -107,6 +121,7 @@ class VideoDisplay extends React.Component<
               <VideoWrapper background="pink" height="50%">
                 {" "}
                 <VideoPlayer
+                  isPlaying={this.state.playVideos}
                   width={this.state.wrapperWidth}
                   height={this.calculateHeight(0.5)}
                 />
@@ -114,6 +129,7 @@ class VideoDisplay extends React.Component<
               <VideoWrapper background="blue" height="50%">
                 {" "}
                 <VideoPlayer
+                  isPlaying={this.state.playVideos}
                   width={this.state.wrapperWidth}
                   height={this.calculateHeight(0.5)}
                 />
@@ -123,6 +139,7 @@ class VideoDisplay extends React.Component<
               <VideoWrapper background="green" height="25%">
                 {" "}
                 <VideoPlayer
+                  isPlaying={this.state.playVideos}
                   width={this.state.wrapperWidth}
                   height={this.calculateHeight(0.25)}
                 />
@@ -130,6 +147,7 @@ class VideoDisplay extends React.Component<
               <VideoWrapper background="cyan" height="25%">
                 {" "}
                 <VideoPlayer
+                  isPlaying={this.state.playVideos}
                   width={this.state.wrapperWidth}
                   height={this.calculateHeight(0.25)}
                 />
@@ -137,6 +155,7 @@ class VideoDisplay extends React.Component<
               <VideoWrapper background="purple" height="50%">
                 {" "}
                 <VideoPlayer
+                  isPlaying={this.state.playVideos}
                   width={this.state.wrapperWidth}
                   height={this.calculateHeight(0.5)}
                 />
