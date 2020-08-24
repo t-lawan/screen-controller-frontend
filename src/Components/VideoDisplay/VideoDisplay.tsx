@@ -11,17 +11,18 @@ import styled from "styled-components";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
 
 type TVideoDisplayWrapper = {
-    isDisplay: boolean
-  };
+  isDisplay: boolean;
+};
 const VideoDisplayWrapper = styled.div<TVideoDisplayWrapper>`
-  display: grid;
-  grid-template-columns: ${(props) => props.isDisplay ? 'repeat(3, 1fr)' : '1fr'};
+  display: ${props => (props.isDisplay ? "grid" : "block")};
+  grid-template-columns: ${props =>
+    props.isDisplay ? "repeat(3, 1fr)" : "1fr"};
   border: 1px solid black;
-  min-height: 90vh;
+  min-height: 85vh;
 `;
 
 const Column = styled.div`
-  background: 'white';
+  background: "white";
   display: flex;
   flex-direction: column;
 `;
@@ -30,7 +31,7 @@ type TVideoWrapper = {
   height?: string;
 };
 const VideoWrapper = styled.div<TVideoWrapper>`
-  height: ${(props) => props.height};
+  height: ${props => props.height};
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -41,7 +42,6 @@ interface IVideoDisplayState {
   wrapperWidth: number;
   showVideos: boolean;
   playVideos: boolean;
-
 }
 
 interface IVideoDisplayProps {
@@ -49,6 +49,14 @@ interface IVideoDisplayProps {
   ws_message_sent: boolean;
   sendMessageComplete: Function;
   sendMessage: Function;
+}
+
+interface IScreenInfo {
+  height: number;
+}
+
+interface IScreenOject {
+  height: IScreenInfo;
 }
 
 class VideoDisplay extends React.Component<
@@ -66,22 +74,45 @@ class VideoDisplay extends React.Component<
     };
   }
   wrapperRef;
+  screens = {
+    ONE: {
+      height: 0.5
+    },
+    TWO: {
+      height: 0.35
+    },
+    THREE: {
+      height: 0.5
+    },
+    FOUR: {
+      height: 0.25
+    },
+    FIVE: {
+      height: 0.25
+    },
+    SIX: {
+      height: 0.65
+    },
+    INSTALLATION_CAM: {
+      height: 0.5
+    }
+  };
 
   calculateHeight(percent: number): number {
     return percent * this.state.wrapperHeight;
   }
 
   playVideos = () => {
-    if(!this.state.playVideos) {
+    if (!this.state.playVideos) {
       this.setState({
         playVideos: true
-      })
+      });
     } else {
       this.setState({
         playVideos: false
-      })
+      });
     }
-  }
+  };
   showVideos = () => {
     if (this.state.wrapperHeight === 1) {
       this.setState({
@@ -93,79 +124,122 @@ class VideoDisplay extends React.Component<
   };
   render() {
     return (
-      <VideoDisplayWrapper
-        isDisplay={this.state.showVideos}
-        ref={this.wrapperRef}
-      >
-        {this.state.showVideos ? (
-          <React.Fragment>
-            <Column onClick={() => this.playVideos()}>
-              <VideoWrapper background="orange" height="35%">
-                {" "}
-                <VideoPlayer
-                  isPlaying={this.state.playVideos}
-                  width={this.state.wrapperWidth}
-                  height={this.calculateHeight(0.35)}
-                />
-              </VideoWrapper>
-              <VideoWrapper background="yellow" height="65%">
-                {" "}
-                <VideoPlayer
-                  isPlaying={this.state.playVideos}
-                  width={this.state.wrapperWidth}
-                  height={this.calculateHeight(0.65)}
-                />
-              </VideoWrapper>
-            </Column>
-            <Column>
-              <VideoWrapper background="pink" height="50%">
-                {" "}
-                <VideoPlayer
-                  isPlaying={this.state.playVideos}
-                  width={this.state.wrapperWidth}
-                  height={this.calculateHeight(0.5)}
-                />
-              </VideoWrapper>
-              <VideoWrapper background="blue" height="50%">
-                {" "}
-                <VideoPlayer
-                  isPlaying={this.state.playVideos}
-                  width={this.state.wrapperWidth}
-                  height={this.calculateHeight(0.5)}
-                />
-              </VideoWrapper>
-            </Column>
-            <Column>
-              <VideoWrapper background="green" height="25%">
-                {" "}
-                <VideoPlayer
-                  isPlaying={this.state.playVideos}
-                  width={this.state.wrapperWidth}
-                  height={this.calculateHeight(0.25)}
-                />
-              </VideoWrapper>
-              <VideoWrapper background="cyan" height="25%">
-                {" "}
-                <VideoPlayer
-                  isPlaying={this.state.playVideos}
-                  width={this.state.wrapperWidth}
-                  height={this.calculateHeight(0.25)}
-                />
-              </VideoWrapper>
-              <VideoWrapper background="purple" height="50%">
-                {" "}
-                <VideoPlayer
-                  isPlaying={this.state.playVideos}
-                  width={this.state.wrapperWidth}
-                  height={this.calculateHeight(0.5)}
-                />
-              </VideoWrapper>
-            </Column>
-          </React.Fragment>
-        ) : (
-          <Button onClick={() => this.showVideos()} variant="contained"> Show Video Layout</Button>
-        )}
-      </VideoDisplayWrapper>
+      <React.Fragment>
+        <VideoDisplayWrapper
+          isDisplay={this.state.showVideos}
+          ref={this.wrapperRef}
+        >
+          {this.state.showVideos ? (
+            <React.Fragment>
+              <Column onClick={() => this.playVideos()}>
+                {/* SIX */}
+                <VideoWrapper
+                  background="orange"
+                  height={`${this.screens.SIX.height * 100}%`}
+                >
+                  {" "}
+                  <VideoPlayer
+                    isPlaying={this.state.playVideos}
+                    width={this.state.wrapperWidth}
+                    height={this.calculateHeight(this.screens.SIX.height)}
+                  />
+                </VideoWrapper>
+                {/* TWO */}
+                <VideoWrapper
+                  background="yellow"
+                  height={`${this.screens.TWO.height * 100}%`}
+                >
+                  {" "}
+                  <VideoPlayer
+                    isPlaying={this.state.playVideos}
+                    width={this.state.wrapperWidth}
+                    height={this.calculateHeight(this.screens.TWO.height)}
+                  />
+                </VideoWrapper>
+              </Column>
+              <Column>
+                {/* THREE */}
+
+                <VideoWrapper
+                  background="pink"
+                  height={`${this.screens.THREE.height * 100}%`}
+                >
+                  {" "}
+                  <VideoPlayer
+                    isPlaying={this.state.playVideos}
+                    width={this.state.wrapperWidth}
+                    height={this.calculateHeight(this.screens.THREE.height)}
+                  />
+                </VideoWrapper>
+                {/* INSTALLATION */}
+
+                <VideoWrapper
+                  background="blue"
+                  height={`${this.screens.INSTALLATION_CAM.height * 100}%`}
+                >
+                  {" "}
+                  <VideoPlayer
+                    isPlaying={this.state.playVideos}
+                    width={this.state.wrapperWidth}
+                    height={this.calculateHeight(
+                      this.screens.INSTALLATION_CAM.height
+                    )}
+                  />
+                </VideoWrapper>
+              </Column>
+              <Column>
+                {/* FOUR */}
+
+                <VideoWrapper
+                  background="green"
+                  height={`${this.screens.FOUR.height * 100}%`}
+                >
+                  {" "}
+                  <VideoPlayer
+                    isPlaying={this.state.playVideos}
+                    width={this.state.wrapperWidth}
+                    height={this.calculateHeight(this.screens.FOUR.height)}
+                  />
+                </VideoWrapper>
+                {/* FIVE */}
+
+                <VideoWrapper
+                  background="cyan"
+                  height={`${this.screens.FIVE.height * 100}%`}
+                >
+                  {" "}
+                  <VideoPlayer
+                    isPlaying={this.state.playVideos}
+                    width={this.state.wrapperWidth}
+                    height={this.calculateHeight(this.screens.FIVE.height)}
+                  />
+                </VideoWrapper>
+                {/* ONE */}
+
+                <VideoWrapper
+                  background="purple"
+                  height={`${this.screens.ONE.height * 100}%`}
+                >
+                  {" "}
+                  <VideoPlayer
+                    isPlaying={this.state.playVideos}
+                    width={this.state.wrapperWidth}
+                    height={this.calculateHeight(this.screens.ONE.height)}
+                  />
+                </VideoWrapper>
+              </Column>
+            </React.Fragment>
+          ) : (
+            <Button onClick={() => this.showVideos()} variant="contained">
+              {" "}
+              Show Video Layout
+            </Button>
+          )}
+        </VideoDisplayWrapper>
+        <div>
+          <p> 00: 00</p>
+        </div>
+      </React.Fragment>
     );
   }
 }
@@ -173,15 +247,18 @@ class VideoDisplay extends React.Component<
 const mapStateToProps = (state: IState) => {
   return {
     ws_message: state.ws_message,
-    ws_message_sent: state.ws_message_sent,
+    ws_message_sent: state.ws_message_sent
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     sendMessageComplete: () => dispatch(sendMessageComplete()),
-    sendMessage: (message: string) => dispatch(sendMessage(message)),
+    sendMessage: (message: string) => dispatch(sendMessage(message))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(VideoDisplay);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(VideoDisplay);
