@@ -23,7 +23,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
       <Communication />
       <Container>
         <FormModal />
-        <Navbar />
+        {/* <Navbar /> */}
           {props.children}
       </Container>
     </>
