@@ -9,6 +9,8 @@ import { EWSClientType } from "../../Enums/EWSClientType";
 import { EWSMessageType } from "../../Enums/EWSMessageType";
 import styled from "styled-components";
 import VideoPlayer from "../VideoPlayer/VideoPlayer";
+import LandScapeVideo from '../../Assets/landscape.mp4';
+import PortraitVideo from '../../Assets/portrait.mp4';
 
 type TVideoDisplayWrapper = {
   isDisplay: boolean;
@@ -17,8 +19,8 @@ const VideoDisplayWrapper = styled.div<TVideoDisplayWrapper>`
   display: ${(props) => (props.isDisplay ? "grid" : "block")};
   grid-template-columns: ${(props) =>
     props.isDisplay ? "repeat(3, 1fr)" : "1fr"};
-  border: 1px solid black;
-  min-height: 85vh;
+  min-height: 80vh;
+  grid-column-gap: 4rem;
 `;
 type TColumn = {
     justifyContent?: string
@@ -38,6 +40,7 @@ const VideoWrapper = styled.div<TVideoWrapper>`
   height: ${(props) => props.height};
   display: flex;
   flex-direction: column;
+  margin-top: 2rem;
 `;
 const TimeCodeWrapper = styled.div`
   display: flex;
@@ -92,10 +95,10 @@ class VideoDisplay extends React.Component<
       height: 0.3,
     },
     FOUR: {
-      height: 0.2,
+      height: 0.25,
     },
     FIVE: {
-      height: 0.2,
+      height: 0.25,
     },
     SIX: {
       height: 0.4,
@@ -150,6 +153,7 @@ class VideoDisplay extends React.Component<
                     isPlaying={this.state.playVideos}
                     width={this.state.wrapperWidth}
                     height={this.calculateHeight(this.screens.SIX.height)}
+                    videoUrl={PortraitVideo}
                   />
                 </VideoWrapper>
                 {/* TWO */}
@@ -161,6 +165,7 @@ class VideoDisplay extends React.Component<
                     isPlaying={this.state.playVideos}
                     width={this.state.wrapperWidth}
                     height={this.calculateHeight(this.screens.TWO.height)}
+                    videoUrl={LandScapeVideo}
                   />
                 </VideoWrapper>
               </Column>
@@ -177,6 +182,7 @@ class VideoDisplay extends React.Component<
                     isPlaying={this.state.playVideos}
                     width={this.state.wrapperWidth}
                     height={this.calculateHeight(this.screens.THREE.height)}
+                    videoUrl={LandScapeVideo}
                   />
                 </VideoWrapper>
                 {/* INSTALLATION */}
@@ -207,14 +213,16 @@ class VideoDisplay extends React.Component<
                     isLeft={true}
                     isPlaying={this.state.playVideos}
                     width={this.state.wrapperWidth}
-                    height={this.calculateHeight(this.screens.FOUR.height)}
+                    height={this.calculateHeight(this.screens.FOUR.height + this.screens.FIVE.height)}
+                    videoUrl={PortraitVideo}
                   />
-                  <VideoPlayer
+                  {/* <VideoPlayer
                     isPlaying={this.state.playVideos}
                     isLeft={true}
                     width={this.state.wrapperWidth}
                     height={this.calculateHeight(this.screens.FIVE.height)}
-                  />
+                    videoUrl={LandScapeVideo}
+                  /> */}
                 </VideoWrapper>
                 {/* FIVE */}
 
@@ -235,6 +243,8 @@ class VideoDisplay extends React.Component<
                     isPlaying={this.state.playVideos}
                     width={this.state.wrapperWidth}
                     height={this.calculateHeight(this.screens.ONE.height)}
+                    videoUrl={PortraitVideo}
+
                   />
                 </VideoWrapper>
               </Column>

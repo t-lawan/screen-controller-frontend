@@ -76,7 +76,7 @@ class VideoPlayer extends React.Component<IVideoPlayerProps, IVideoPlayerState> 
   render() {
     return (
       <VideoPlayerWrapper>
-        <StyledPlayer isLeft={this.isLeft} ref={(player) => this.player = player} muted={true} fluid={false} width={'90%'} height={this.props.height}  preload={'metadata'} src={Video}>
+        <StyledPlayer isLeft={this.isLeft} ref={(player) => this.player = player} muted={true} fluid={false} height={this.props.height}  preload={'metadata'} src={this.props.videoUrl ? this.props.videoUrl : Video}>
           <ControlBar disableCompletely={true} className="my-class" />
         </StyledPlayer>
 
