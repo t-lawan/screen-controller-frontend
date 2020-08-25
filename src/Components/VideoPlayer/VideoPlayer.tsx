@@ -13,6 +13,10 @@ const VideoPlayerWrapper = styled.div`
   .video-react-big-play-button {
     display: none;
   }
+`
+
+const StyledPlayer = styled(Player)`
+align-self: ${(props) => (props.isLeft ? "self-end" : "center")};
 
 `
 type TLabel = {
@@ -37,16 +41,19 @@ interface IVideoPlayerProps {
     width: number;
     height: number;
     isPlaying: boolean;
+    isLeft?: boolean;
 }
 
 class VideoPlayer extends React.Component<IVideoPlayerProps, IVideoPlayerState> {
     player;
+    isLeft;
     constructor(props: IVideoPlayerProps) {
         super(props);
         this.state = {
           isPlaying: false
         }
         this.player = React.createRef();
+        this.isLeft = props.isLeft ? props.isLeft : false
     }
 
     componentDidUpdate(prevProps) {
@@ -69,9 +76,9 @@ class VideoPlayer extends React.Component<IVideoPlayerProps, IVideoPlayerState> 
   render() {
     return (
       <VideoPlayerWrapper>
-        <Player ref={(player) => this.player = player} muted={true} fluid={false} width={'90%'} height={this.props.height}  preload={'metadata'} src={Video}>
+        <StyledPlayer isLeft={this.isLeft} ref={(player) => this.player = player} muted={true} fluid={false} width={'90%'} height={this.props.height}  preload={'metadata'} src={Video}>
           <ControlBar disableCompletely={true} className="my-class" />
-        </Player>
+        </StyledPlayer>
 
       </VideoPlayerWrapper>
     );

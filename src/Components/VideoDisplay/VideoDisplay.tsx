@@ -14,27 +14,34 @@ type TVideoDisplayWrapper = {
   isDisplay: boolean;
 };
 const VideoDisplayWrapper = styled.div<TVideoDisplayWrapper>`
-  display: ${props => (props.isDisplay ? "grid" : "block")};
-  grid-template-columns: ${props =>
+  display: ${(props) => (props.isDisplay ? "grid" : "block")};
+  grid-template-columns: ${(props) =>
     props.isDisplay ? "repeat(3, 1fr)" : "1fr"};
   border: 1px solid black;
   min-height: 85vh;
 `;
-
-const Column = styled.div`
+type TColumn = {
+    justifyContent?: string
+  };
+const Column = styled.div<TColumn>`
   background: "white";
   display: flex;
   flex-direction: column;
+  justify-content: ${(props) => props.justifyContent ? props.justifyContent : 'space-between'};
 `;
 type TVideoWrapper = {
   background?: string;
   height?: string;
+  justifyContent?: string
 };
 const VideoWrapper = styled.div<TVideoWrapper>`
-  height: ${props => props.height};
+  height: ${(props) => props.height};
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+`;
+const TimeCodeWrapper = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 interface IVideoDisplayState {
@@ -70,32 +77,32 @@ class VideoDisplay extends React.Component<
       wrapperHeight: 1,
       wrapperWidth: 1,
       showVideos: false,
-      playVideos: false
+      playVideos: false,
     };
   }
   wrapperRef;
   screens = {
     ONE: {
-      height: 0.5
+      height: 0.5,
     },
     TWO: {
-      height: 0.35
+      height: 0.3,
     },
     THREE: {
-      height: 0.5
+      height: 0.3,
     },
     FOUR: {
-      height: 0.25
+      height: 0.2,
     },
     FIVE: {
-      height: 0.25
+      height: 0.2,
     },
     SIX: {
-      height: 0.65
+      height: 0.4,
     },
     INSTALLATION_CAM: {
-      height: 0.5
-    }
+      height: 0.3,
+    },
   };
 
   calculateHeight(percent: number): number {
@@ -105,11 +112,11 @@ class VideoDisplay extends React.Component<
   playVideos = () => {
     if (!this.state.playVideos) {
       this.setState({
-        playVideos: true
+        playVideos: true,
       });
     } else {
       this.setState({
-        playVideos: false
+        playVideos: false,
       });
     }
   };
@@ -118,7 +125,7 @@ class VideoDisplay extends React.Component<
       this.setState({
         wrapperHeight: this.wrapperRef.current.offsetHeight - 20,
         wrapperWidth: this.wrapperRef.current.offsetWidth / 3,
-        showVideos: true
+        showVideos: true,
       });
     }
   };
@@ -131,10 +138,11 @@ class VideoDisplay extends React.Component<
         >
           {this.state.showVideos ? (
             <React.Fragment>
-              <Column onClick={() => this.playVideos()}>
+              <Column 
+                justifyContent={'space-around'}
+                onClick={() => this.playVideos()}>
                 {/* SIX */}
                 <VideoWrapper
-                  background="orange"
                   height={`${this.screens.SIX.height * 100}%`}
                 >
                   {" "}
@@ -146,7 +154,6 @@ class VideoDisplay extends React.Component<
                 </VideoWrapper>
                 {/* TWO */}
                 <VideoWrapper
-                  background="yellow"
                   height={`${this.screens.TWO.height * 100}%`}
                 >
                   {" "}
@@ -157,11 +164,12 @@ class VideoDisplay extends React.Component<
                   />
                 </VideoWrapper>
               </Column>
-              <Column>
+              <Column
+                justifyContent={'flex-end'}
+              >
                 {/* THREE */}
 
                 <VideoWrapper
-                  background="pink"
                   height={`${this.screens.THREE.height * 100}%`}
                 >
                   {" "}
@@ -174,7 +182,6 @@ class VideoDisplay extends React.Component<
                 {/* INSTALLATION */}
 
                 <VideoWrapper
-                  background="blue"
                   height={`${this.screens.INSTALLATION_CAM.height * 100}%`}
                 >
                   {" "}
@@ -187,37 +194,40 @@ class VideoDisplay extends React.Component<
                   />
                 </VideoWrapper>
               </Column>
-              <Column>
+              <Column
+                justifyContent={'flex-start'}
+              >
                 {/* FOUR */}
 
                 <VideoWrapper
-                  background="green"
-                  height={`${this.screens.FOUR.height * 100}%`}
+                  height={`${(this.screens.FOUR.height +  this.screens.FIVE.height)* 100}%`}
                 >
                   {" "}
                   <VideoPlayer
+                    isLeft={true}
                     isPlaying={this.state.playVideos}
                     width={this.state.wrapperWidth}
                     height={this.calculateHeight(this.screens.FOUR.height)}
                   />
-                </VideoWrapper>
-                {/* FIVE */}
-
-                <VideoWrapper
-                  background="cyan"
-                  height={`${this.screens.FIVE.height * 100}%`}
-                >
-                  {" "}
                   <VideoPlayer
                     isPlaying={this.state.playVideos}
+                    isLeft={true}
                     width={this.state.wrapperWidth}
                     height={this.calculateHeight(this.screens.FIVE.height)}
                   />
                 </VideoWrapper>
+                {/* FIVE */}
+
+                {/* <VideoWrapper
+                  background="cyan"
+                  height={`${this.screens.FIVE.height * 100}%`}
+                >
+                  {" "}
+
+                </VideoWrapper> */}
                 {/* ONE */}
 
                 <VideoWrapper
-                  background="purple"
                   height={`${this.screens.ONE.height * 100}%`}
                 >
                   {" "}
@@ -236,9 +246,9 @@ class VideoDisplay extends React.Component<
             </Button>
           )}
         </VideoDisplayWrapper>
-        <div>
-          <p> 00: 00</p>
-        </div>
+        <TimeCodeWrapper>
+          <h1> 00: 00</h1>
+        </TimeCodeWrapper>
       </React.Fragment>
     );
   }
@@ -247,18 +257,15 @@ class VideoDisplay extends React.Component<
 const mapStateToProps = (state: IState) => {
   return {
     ws_message: state.ws_message,
-    ws_message_sent: state.ws_message_sent
+    ws_message_sent: state.ws_message_sent,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     sendMessageComplete: () => dispatch(sendMessageComplete()),
-    sendMessage: (message: string) => dispatch(sendMessage(message))
+    sendMessage: (message: string) => dispatch(sendMessage(message)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(VideoDisplay);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoDisplay);
