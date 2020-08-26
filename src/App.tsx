@@ -24,7 +24,7 @@ const App: React.FC = () => {
       <Router>
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/admin" exact component={Admin} />
+          <Route path="/admin" component={Admin} />
         </Switch>
       </Router>
     </Provider>
