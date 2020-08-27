@@ -21,11 +21,11 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
       <State />
       <AudioPlayer />
       <Communication />
-      <Container>
+      <div>
         <FormModal />
         {/* <Navbar /> */}
           {props.children}
-      </Container>
+      </div>
     </>
   );
 };
