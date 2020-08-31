@@ -108,25 +108,25 @@ class VideoDisplay extends React.Component<
           aspectRatio: EVideoAspectRatio.PORTRAIT
         },
         TWO: {
-          height: 0.3,
+          height: 0.4,
           isLive: false,
           text: "TWO",
           aspectRatio: EVideoAspectRatio.LANDSCAPE
         },
         THREE: {
-          height: 0.3,
+          height: 0.4,
           isLive: false,
-          text: "FOUR",
+          text: "THREE",
           aspectRatio: EVideoAspectRatio.LANDSCAPE
         },
         FOUR: {
-          height: 0.5,
+          height: 0.4,
           isLive: false,
           text: "FOUR",
           aspectRatio: EVideoAspectRatio.PORTRAIT
         },
         FIVE: {
-          height: 0.25,
+          height: 0.4,
           isLive: false,
           text: "FIVE",
           aspectRatio: EVideoAspectRatio.LANDSCAPE
@@ -140,7 +140,7 @@ class VideoDisplay extends React.Component<
 
         },
         INSTALLATION_CAM: {
-          height: 0.3,
+          height: 0.4,
           isLive: false,
           text: "INSTALLATION CAM",
           aspectRatio: EVideoAspectRatio.LANDSCAPE
