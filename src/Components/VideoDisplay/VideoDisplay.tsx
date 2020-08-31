@@ -141,7 +141,7 @@ class VideoDisplay extends React.Component<
         },
         INSTALLATION_CAM: {
           height: 0.3,
-          isLive: true,
+          isLive: false,
           text: "INSTALLATION CAM",
           aspectRatio: EVideoAspectRatio.LANDSCAPE
         }
