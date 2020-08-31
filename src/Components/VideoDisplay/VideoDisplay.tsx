@@ -17,7 +17,7 @@ const VideoDisplayWrapper = styled.div<TVideoDisplayWrapper>`
   grid-template-columns: ${props =>
     props.isDisplay ? "repeat(3, 1fr)" : "1fr"};
   min-height: 80vh;
-  grid-column-gap: 4rem;
+  /* grid-column-gap: 4rem; */
 `;
 type TColumn = {
   justifyContent?: string;
@@ -101,46 +101,56 @@ class VideoDisplay extends React.Component<
       showVideos: false,
       playVideos: false,
       screens: {
+        // H 75 W 133
+
         ONE: {
-          height: 0.5,
+          height: 133/237,
           isLive: false,
           text: "ONE",
           aspectRatio: EVideoAspectRatio.PORTRAIT
         },
+        // H 68 W 122
+
         TWO: {
-          height: 0.4,
+          height: 0.9 * 68/201,
           isLive: false,
           text: "TWO",
           aspectRatio: EVideoAspectRatio.LANDSCAPE
         },
+        // H 75 W 133        
         THREE: {
           height: 0.4,
           isLive: false,
           text: "THREE",
           aspectRatio: EVideoAspectRatio.LANDSCAPE
         },
+        // H 52 W 93
+
         FOUR: {
-          height: 0.4,
+          height: 52/237,
           isLive: false,
           text: "FOUR",
-          aspectRatio: EVideoAspectRatio.PORTRAIT
+          aspectRatio: EVideoAspectRatio.LANDSCAPE
         },
+        // H 52 W 93
+
         FIVE: {
-          height: 0.4,
+          height: 52/237,
           isLive: false,
           text: "FIVE",
           aspectRatio: EVideoAspectRatio.LANDSCAPE
 
         },
+        // H 75 W 133
         SIX: {
-          height: 0.5,
+          height: 0.9 * 133/201,
           isLive: false,
           text: "SIX",
           aspectRatio: EVideoAspectRatio.PORTRAIT
-
         },
+
         INSTALLATION_CAM: {
-          height: 0.4,
+          height: 0.3,
           isLive: false,
           text: "INSTALLATION CAM",
           aspectRatio: EVideoAspectRatio.LANDSCAPE
@@ -160,7 +170,7 @@ class VideoDisplay extends React.Component<
     },
     {
       justifyContent: "flex-start",
-      list: [EScreenNumber.FOUR, EScreenNumber.ONE]
+      list: [EScreenNumber.FOUR, EScreenNumber.FIVE, EScreenNumber.ONE]
     }
   ];
 
