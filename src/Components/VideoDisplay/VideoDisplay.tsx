@@ -112,7 +112,7 @@ class VideoDisplay extends React.Component<
         // H 68 W 122
 
         TWO: {
-          height: 0.9 * 68/201,
+          height: 68/201,
           isLive: false,
           text: "TWO",
           aspectRatio: EVideoAspectRatio.LANDSCAPE
@@ -143,7 +143,7 @@ class VideoDisplay extends React.Component<
         },
         // H 75 W 133
         SIX: {
-          height: 0.9 * 133/201,
+          height: 133/201,
           isLive: false,
           text: "SIX",
           aspectRatio: EVideoAspectRatio.PORTRAIT

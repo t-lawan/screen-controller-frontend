@@ -6,11 +6,17 @@ import FormModal from "../Modal/FormModal";
 import State from "../State/State";
 import Communication from "../Communication/Communication";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
-
+import styled from 'styled-components'
 interface LayoutProps {
   children: any;
   title: string;
 }
+
+const LayoutWrapper = styled.div`
+  background: black;
+  color: white;
+  height: 100vh;
+`
 const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
   return (
     <>
@@ -21,11 +27,11 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
       <State />
       <AudioPlayer />
       <Communication />
-      <div>
+      <LayoutWrapper>
         <FormModal />
         {/* <Navbar /> */}
           {props.children}
-      </div>
+      </LayoutWrapper>
     </>
   );
 };
