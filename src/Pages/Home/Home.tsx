@@ -4,7 +4,7 @@ import VideoDisplay from '../../Components/VideoDisplay/VideoDisplay';
 
 const Home: React.FC = () => {
     return (
-        <Layout title="Video Streams">
+        <Layout blackBg={true} title="Video Streams">
             <VideoDisplay />
         </Layout>
     )

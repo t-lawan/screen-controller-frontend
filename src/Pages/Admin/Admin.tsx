@@ -4,7 +4,7 @@ import AdminTabs from '../../Components/Tabs/AdminTabs';
 
 const Admin: React.FC = () => {
     return (
-        <Layout title="Admin">
+        <Layout blackBg={false} title="Admin">
             <AdminTabs />
         </Layout>
     )
