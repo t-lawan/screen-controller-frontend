@@ -81,6 +81,7 @@ interface IVideoDisplayState {
   showVideos: boolean;
   playVideos: boolean;
   screens: IScreenContainer;
+  timeInSeconds: number;
 }
 
 interface IVideoDisplayProps {
@@ -104,6 +105,7 @@ class VideoDisplay extends React.Component<
     this.wrapperRef = React.createRef();
     this.state = {
       wrapperHeight: 1,
+      timeInSeconds: 0,
       wrapperWidth: 1,
       showVideos: false,
       playVideos: false,
@@ -164,6 +166,7 @@ class VideoDisplay extends React.Component<
     };
   }
   wrapperRef;
+  timer;
   columns: IColumn[] = [
     {
       justifyContent: "space-around",
@@ -323,8 +326,18 @@ class VideoDisplay extends React.Component<
         wrapperWidth: this.wrapperRef.current.offsetWidth / 3,
         showVideos: true
       });
+
+      this.startTimer();
     }
   };
+
+  startTimer = () => {
+    this.timer = setInterval(() => {
+      this.setState({
+        timeInSeconds: this.state.timeInSeconds + 1
+      })
+    }, 1000)
+  }
   render() {
     return (
       <React.Fragment>
@@ -379,7 +392,7 @@ class VideoDisplay extends React.Component<
           )}
         </VideoDisplayWrapper>
         <TimeCodeWrapper>
-          <h1> 00: 00</h1>
+          <h1> {this.state.timeInSeconds}</h1>
         </TimeCodeWrapper>
       </React.Fragment>
     );
