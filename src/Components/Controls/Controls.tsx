@@ -2,7 +2,7 @@ import * as React from "react";
 import { Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import { sendMessage, sendMessageComplete } from '../../Store/actions';
+import { sendMessage, sendMessageComplete, dispatchMessage } from '../../Store/actions';
 import { IState } from '../../Store/reducer';
 import { IWebsocketMessage } from '../../Interfaces/IRequestData';
 import { EWSClientType } from "../../Enums/EWSClientType";
@@ -13,8 +13,7 @@ interface IControlState {}
 interface IControlProps {
     ws_message: string,
     ws_message_sent: boolean,
-    sendMessageComplete: Function,
-    sendMessage: Function
+    dispatchMessage: Function
 }
 
 class Controls extends React.Component<IControlProps, IControlState> {
@@ -30,7 +29,7 @@ class Controls extends React.Component<IControlProps, IControlState> {
             raspberry_pi_id: 1
         }
         let stringMessage = JSON.stringify(message);
-        this.props.sendMessage(stringMessage);
+        this.props.dispatchMessage(stringMessage);
       }
   }
   render() {
@@ -47,8 +46,7 @@ const mapStateToProps = (state: IState) => {
   
   const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-      sendMessageComplete: () => dispatch(sendMessageComplete()),
-      sendMessage: (message: string) => dispatch(sendMessage(message))
+      dispatchMessage: (message: string) => dispatch(dispatchMessage(message))
     };
   };
   

@@ -8,7 +8,7 @@ import {
   SET_AUDIO
 } from "./actions";
 import { IAudio } from "../Interfaces/IAudio";
-import { UPDATE_AUDIO } from './actions';
+import { UPDATE_AUDIO, DISPATCH_MESSAGE, DISPATCH_MESSAGE_SENT } from './actions';
 import {
   OPEN_MODAL,
   CLOSE_MODAL,
@@ -25,6 +25,8 @@ export interface IState {
   hasLoaded: false;
   ws_message: string;
   ws_message_sent: boolean;
+  dispatched_ws_message: string;
+  dispatched_ws_message_sent: boolean;
 }
 
 const initalState: IState = {
@@ -35,7 +37,9 @@ const initalState: IState = {
   modal_component: null,
   hasLoaded: false,
   ws_message: "",
-  ws_message_sent: false
+  ws_message_sent: false,
+  dispatched_ws_message: "",
+  dispatched_ws_message_sent: false
 };
 
 export const reducer = (state: IState = initalState, action: AnyAction) => {
@@ -92,6 +96,18 @@ export const reducer = (state: IState = initalState, action: AnyAction) => {
         ...state,
         ws_message: action.ws_message,
         ws_message_sent: action.ws_message_sent
+      };
+    case DISPATCH_MESSAGE:
+      return {
+        ...state,
+        dispatched_ws_message: action.dispatched_ws_message,
+        dispatched_ws_message_sent: action.dispatched_ws_message_sent
+      };
+    case DISPATCH_MESSAGE_SENT:
+      return {
+        ...state,
+        dispatched_ws_message: action.dispatched_ws_message,
+        dispatched_ws_message_sent: action.dispatched_ws_message_sent
       };
     default:
       return state;

@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { IState } from "../../Store/reducer";
 import { Dispatch } from "redux";
-import { sendMessageComplete, sendMessage } from "../../Store/actions";
+import { sendMessageComplete, sendMessage, dispatchMessageComplete } from '../../Store/actions';
 import { IWebsocketMessage } from "../../Interfaces/IRequestData";
 import { EWSClientType } from "../../Enums/EWSClientType";
 import { EWSMessageType } from "../../Enums/EWSMessageType";
@@ -13,8 +13,11 @@ interface ICommunicationProps {
   [key: string]: any;
   ws_message: string;
   ws_message_sent: boolean;
+  dispatched_ws_message: string;
+  dispatched_ws_message_sent: boolean;
   sendMessage: Function;
   sendMessageComplete: Function;
+  dispatchMessageComplete: Function;
 }
 
 class Communication extends React.Component<
@@ -53,6 +56,8 @@ class Communication extends React.Component<
         case EWSMessageType.START_STREAM:
           this.props.sendMessage(event.data);
           break;
+        case EWSMessageType.START_SCHEDULE:
+          this.props.sendMessage(event.data);
         default:
           console.log("NO_ACTION");
           break;
@@ -62,10 +67,10 @@ class Communication extends React.Component<
 
   componentDidUpdate(prevProps) {
     if (
-      this.props.ws_message_sent &&
-      prevProps.ws_message_sent !== this.props.ws_message_sent
+      this.props.dispatched_ws_message_sent &&
+      prevProps.dispatched_ws_message_sent !== this.props.dispatched_ws_message_sent
     ) {
-      let message: IWebsocketMessage = JSON.parse(this.props.ws_message);
+      let message: IWebsocketMessage = JSON.parse(this.props.dispatched_ws_message);
       if(message.message === EWSMessageType.START_SCHEDULE) {
         this.sendMessage();
       }
@@ -74,8 +79,8 @@ class Communication extends React.Component<
 
   sendMessage = () => {
     if (this.ws.OPEN) {
-      this.ws.send(this.props.ws_message);
-      this.props.sendMessageComplete();
+      this.ws.send(this.props.dispatched_ws_message);
+      this.props.dispatchMessageComplete();
     }
   };
 
@@ -87,13 +92,16 @@ class Communication extends React.Component<
 const mapStateToProps = (state: IState) => {
   return {
     ws_message: state.ws_message,
-    ws_message_sent: state.ws_message_sent
+    ws_message_sent: state.ws_message_sent,
+    dispatched_ws_message: state.dispatched_ws_message,
+    dispatched_ws_message_sent: state.dispatched_ws_message_sent
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     sendMessageComplete: () => dispatch(sendMessageComplete()),
+    dispatchMessageComplete: () => dispatch(dispatchMessageComplete()),
     sendMessage: (message: string) => dispatch(sendMessage(message))
   };
 };

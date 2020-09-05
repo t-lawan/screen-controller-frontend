@@ -17,8 +17,15 @@ export const HAS_LOADED = 'HAS_LOADED';
 export const OPEN_MODAL = "OPEN_MODAL";
 export const CLOSE_MODAL = "CLOSE_MODAL";
 
+// This is for receiving WS MESSAGES
 export const SEND_MESSAGE = 'SEND_MESSAGE'
 export const SEND_MESSAGE_COMPLETE = 'SEND_MESSAGE_COMPLETE'
+
+
+// This is for sending WS MESSAGES
+export const DISPATCH_MESSAGE = 'DISPATCH_MESSAGE'
+export const DISPATCH_MESSAGE_SENT = 'DISPATCH_MESSAGE_SENT'
+
 
 export const sendMessage = (message: string) => {
     return  {
@@ -26,6 +33,22 @@ export const sendMessage = (message: string) => {
         ws_message: message,
         ws_message_sent: true
 
+    }
+}
+
+export const dispatchMessage = (message: string) => {
+    return  {
+        type: DISPATCH_MESSAGE,
+        dispatched_ws_message: message,
+        dispatched_ws_message_sent: true
+    }
+}
+
+export const dispatchMessageComplete = () => {
+    return  {
+        type: DISPATCH_MESSAGE_SENT,
+        dispatched_ws_message: '',
+        dispatched_ws_message_sent: false
     }
 }
 
