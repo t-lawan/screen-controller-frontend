@@ -331,13 +331,20 @@ class VideoDisplay extends React.Component<
     }
   };
 
+  displayTimecode = (seconds: number) : string => {
+    const format = val => `0${Math.floor(val)}`.slice(-2)
+    let hours = seconds / 3600;
+    let minutes = (seconds % 3600) / 60;
+    return [hours, minutes, seconds % 60].map(format).join(':')
+  };
+
   startTimer = () => {
     this.timer = setInterval(() => {
       this.setState({
         timeInSeconds: this.state.timeInSeconds + 1
-      })
-    }, 1000)
-  }
+      });
+    }, 1000);
+  };
   render() {
     return (
       <React.Fragment>
@@ -392,7 +399,7 @@ class VideoDisplay extends React.Component<
           )}
         </VideoDisplayWrapper>
         <TimeCodeWrapper>
-          <h1> {this.state.timeInSeconds}</h1>
+          <h1> {this.displayTimecode(this.state.timeInSeconds)}</h1>
         </TimeCodeWrapper>
       </React.Fragment>
     );
