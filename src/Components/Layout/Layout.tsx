@@ -10,11 +10,14 @@ import styled from 'styled-components'
 interface LayoutProps {
   children: any;
   title: string;
+  blackBg: boolean;
 }
-
-const LayoutWrapper = styled.div`
-  background: black;
-  color: white;
+type TLayoutWrapper = {
+  blackBg: boolean;
+};
+const LayoutWrapper = styled.div<TLayoutWrapper>`
+  background: ${props => props.blackBg ? 'black' : 'white'};
+  color: ${props => props.blackBg ? 'white' : 'black'};
   height: 100vh;
 `
 const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
@@ -27,7 +30,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
       <State />
       <AudioPlayer />
       <Communication />
-      <LayoutWrapper>
+      <LayoutWrapper blackBg={props.blackBg}>
         <FormModal />
         {/* <Navbar /> */}
           {props.children}

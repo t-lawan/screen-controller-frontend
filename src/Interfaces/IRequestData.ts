@@ -41,6 +41,6 @@ export interface IUpdateScreenRequestBody {
 export interface IWebsocketMessage {
     message: EWSMessageType;
     client_type: EWSClientType;
-    raspberry_pi_id?: number;
+    raspberry_pi_id: number;
     payload?: any;
 }
