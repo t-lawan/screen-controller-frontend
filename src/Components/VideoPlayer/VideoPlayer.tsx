@@ -4,6 +4,9 @@ import "video-react/dist/video-react.css";
 import Video from "../../Assets/Video.mp4";
 import { Player, ControlBar } from "video-react";
 import { EVideoAspectRatio } from "../../Enums/EVideoAspectRatio";
+import { IState } from "../../Store/reducer";
+import { connect } from "react-redux";
+import { IVideo } from "../../Interfaces/IVideo";
 
 const VideoPlayerWrapper = styled.div`
   display: flex;
@@ -18,7 +21,7 @@ const VideoPlayerWrapper = styled.div`
 
 const Text = styled.h5`
   margin: 0;
-`
+`;
 
 const StyledPlayer = styled(Player)`
   /* align-self: ${props => (props.isLeft ? "self-end" : "center")}; */
@@ -38,6 +41,7 @@ const Label = styled.h1<TLabel>`
 
 interface IVideoPlayerState {
   isPlaying: boolean;
+  videoUrl?: string;
 }
 
 interface IVideoPlayerProps {
@@ -48,6 +52,8 @@ interface IVideoPlayerProps {
   aspectRatio: EVideoAspectRatio;
   isLive?: boolean;
   text?: string;
+  id?: string;
+  videos?: IVideo[];
 }
 
 class VideoPlayer extends React.Component<
@@ -63,24 +69,35 @@ class VideoPlayer extends React.Component<
     this.player = React.createRef();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: IVideoPlayerProps) {
     if (this.props.isPlaying !== prevProps.isPlaying) {
       if (this.state.isPlaying) {
-        // this.player.pause()
+        this.player.pause();
         this.setState({
           isPlaying: false
         });
       } else {
-        // this.player.play()
-
+        this.player.play();
         this.setState({
           isPlaying: true
         });
       }
     }
-  }
-  "http://admin:false.memory@192.168.0.25/ISAPI/Streaming/channels/102/httpPreview";
 
+    if (this.props.id && prevProps.id !== this.props.id) {
+      if (this.props.videos) {
+        let video: IVideo | undefined = this.props.videos.find(vid => {
+          return vid.id === this.props.id;
+        });
+
+        if (video) {
+          this.setState({
+            videoUrl: video.uri
+          })
+        }
+      }
+    }
+  }
   render() {
     let width =
       this.props.height *
@@ -93,7 +110,7 @@ class VideoPlayer extends React.Component<
           <img
             height={this.props.height}
             width={width}
-            src="http://admin:false.memory@192.168.0.25/ISAPI/Streaming/channels/103/httpPreview"
+            src="http://admin:false.memory@192.168.0.25/h264/ch1/main/av_stream"
           />
         ) : null}
         {!this.props.isLive ? (
@@ -106,15 +123,25 @@ class VideoPlayer extends React.Component<
             fluid={false}
             height={this.props.height}
             preload={"metadata"}
-            src={this.props.videoUrl}
+            src={this.state.videoUrl ? `https://dm0cfdicfoqce.cloudfront.net/${this.state.videoUrl}` : this.props.videoUrl}
+            loop={true}
+            autoPlay={true}
           >
             <ControlBar disableCompletely={true} className="my-class" />
           </StyledPlayer>
         ) : null}
-        <Text>{this.props.text ? this.props.text : 'placeholders'}</Text>
+        <Text>{this.props.text ? this.props.text : "placeholders"}</Text>
       </VideoPlayerWrapper>
     );
   }
 }
+const mapStateToProps = (state: IState) => {
+  return {
+    videos: state.videos
+  };
+};
 
-export default VideoPlayer;
+export default connect(
+  mapStateToProps,
+  null
+)(VideoPlayer);

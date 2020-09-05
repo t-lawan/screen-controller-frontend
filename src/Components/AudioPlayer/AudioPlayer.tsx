@@ -43,7 +43,16 @@ class AudioPlayer extends React.Component<
   }
 
   handleWebsocketMessage() {
-    this.play();
+    let message: IWebsocketMessage = JSON.parse(this.props.ws_message);
+    if(message) {
+      switch(message.message) {
+        case EWSMessageType.START_AUDIO:
+          console.log('START_AUDIO');
+          this.play()
+          break;
+      }
+    }
+
     this.props.sendMessageComplete()
   }
 
