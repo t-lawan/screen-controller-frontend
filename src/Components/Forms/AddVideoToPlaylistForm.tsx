@@ -160,7 +160,7 @@ class AddVideoToPlaylistForm extends React.Component<
         if (screen.id) {
           await RequestManager.editScreen({
             ...screen,
-            id: screen.id
+            id: screen.id,
           })
             .then(response => {
               let screen: IScreen = response.data.data;

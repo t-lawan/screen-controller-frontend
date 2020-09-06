@@ -11,6 +11,7 @@ import { Typography, FormControl, TextField, InputLabel, Select, MenuItem, FormH
 import { IPlaylistEntry } from '../../Interfaces/IPlaylistEntry';
 import { addScreen } from '../../Store/actions';
 import { Dispatch } from "redux";
+import { IVideo } from '../../Interfaces/IVideo';
 
 interface IScreenFormState {
     [key: string]: any;
@@ -21,18 +22,21 @@ interface IScreenFormState {
     video_file_playlist: IPlaylistEntry[];
     screen_type: EScreenType;
     status: EFormStatus;
+    video_id: string;
     errors: {
       local_ip_address: string;
       raspberry_pi_id: string;
       number_of_screens: string;
       video_file_playlist: string;
       screen_type: string;
+      video_id: string;
     };
   }
   interface IScreenFormProps {
     type: EFormType;
     id?: string;
     screens?: IScreen[];
+    videos?: IVideo[];
     addScreen: Function;
   }
 class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
@@ -46,12 +50,14 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
         video_file_playlist: [],
         screen_type: EScreenType.SLAVE,
         status: EFormStatus.INIT,
+        video_id: '',
         errors: {
             local_ip_address: "",
             raspberry_pi_id: "",
             number_of_screens: "",
             video_file_playlist: "",
             screen_type: "",
+            video_id: ''
         }
       };
     }
@@ -104,8 +110,10 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
           raspberry_pi_id: this.state.raspberry_pi_id,
           number_of_screens: this.state.number_of_screens,
           video_file_playlist: this.state.video_file_playlist,
-          screen_type: this.state.screen_type
+          screen_type: this.state.screen_type, 
+          video_id: this.state.video_id
         };
+
   
         await RequestManager.addScreen(data)
           .then(response => {
@@ -125,28 +133,29 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
           });
       }
   
-      // if (this.props.type === EFormType.EDIT) {
-      //   let data: IUpdateScreenRequestBody = {
-      //     local_ip_address: this.state.local_ip_address,
-      //     raspberry_pi_id: this.state.raspberry_pi_id,
-      //     number_of_screens: this.state.number_of_screens,
-      //     video_file_playlist: this.state.video_file_playlist,
-      //     screen_type: this.state.screen_type,
-      //     id: this.state.id
-      //   };
+      if (this.props.type === EFormType.EDIT) {
+        let data: IUpdateScreenRequestBody = {
+          local_ip_address: this.state.local_ip_address,
+          raspberry_pi_id: this.state.raspberry_pi_id,
+          number_of_screens: this.state.number_of_screens,
+          video_file_playlist: this.state.video_file_playlist,
+          screen_type: this.state.screen_type,
+          id: this.state.id,
+          video_id: this.state.video_id
+        };
   
-      //   await RequestManager.editScreen(data)
-      //     .then(resp => {
-      //       this.setState({
-      //         status: EFormStatus.COMPLETED
-      //       });
-      //     })
-      //     .catch(error => {
-      //       this.setState({
-      //         status: EFormStatus.FAILED
-      //       });
-      //     });
-      // }
+        await RequestManager.editScreen(data)
+          .then(resp => {
+            this.setState({
+              status: EFormStatus.COMPLETED
+            });
+          })
+          .catch(error => {
+            this.setState({
+              status: EFormStatus.FAILED
+            });
+          });
+      }
     };
   
     setScreenState = () => {
@@ -159,7 +168,7 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
         let screen = this.props.screens.find(scre => {
           return scre.id === this.props.id;
         });
-  
+        console.log('SCREEN', screen)
         if (screen) {
           this.setState({
             id: screen.id ? screen.id : '',
@@ -168,6 +177,7 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
             number_of_screens: screen.number_of_screens,
             video_file_playlist: screen.video_file_playlist,
             screen_type: screen.screen_type,
+            video_id: screen.video_id
           });
         }
       }
@@ -231,6 +241,25 @@ class ScreenForm extends React.Component<IScreenFormProps, IScreenFormState> {
                   <MenuItem value={EScreenType.SLAVE}>Slave</MenuItem>
                 </Select>
               </FormControl>
+              {this.props.videos ? (
+              <>
+                <FormControl fullWidth>
+                  <InputLabel id="video_id">Video</InputLabel>
+                  <Select
+                    labelId="video_id"
+                    value={this.state.video_id}
+                    name="video_id"
+                    onChange={this.handleSelectChange.bind(this)}
+                  >
+                    {this.props.videos.map((vid, index) => (
+                      <MenuItem key={index} value={vid.id}>
+                        {vid.title}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </>
+            ) : null}
   
               <Button type="submit"> Submit </Button>
             </form>

@@ -15,6 +15,7 @@ export interface IAddScreenRequestBody {
     number_of_screens: number;
     video_file_playlist: IPlaylistEntry[];
     screen_type: EScreenType;
+    video_id: string;
 }
 
 export interface IUpdateVideoRequestBody {
@@ -36,6 +37,7 @@ export interface IUpdateScreenRequestBody {
     number_of_screens: number;
     video_file_playlist: IPlaylistEntry[];
     screen_type: EScreenType;
+    video_id: string;
 }
 
 export interface IWebsocketMessage {
