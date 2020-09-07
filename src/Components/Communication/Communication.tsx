@@ -33,6 +33,14 @@ class Communication extends React.Component<
   }
 
   componentDidMount() {
+    this.setupWebsocket()
+  }
+
+  setupWebsocket() {
+    this.ws = new WebSocket(
+      "wss://cs70esocmi.execute-api.us-east-1.amazonaws.com/dev"
+    );
+
     this.ws.onopen = event => {
       const message: IWebsocketMessage = {
         client_type: EWSClientType.ADMIN,
@@ -63,6 +71,12 @@ class Communication extends React.Component<
           break;
       }
     };
+
+    this.ws.onclose = () => {
+      setTimeout(() => {
+        this.setupWebsocket()
+      }, 3000)
+    }
   }
 
   componentDidUpdate(prevProps) {
