@@ -32,8 +32,26 @@ class Controls extends React.Component<IControlProps, IControlState> {
         this.props.dispatchMessage(stringMessage);
       }
   }
+
+  startAllDisplays() {
+    if(!this.props.ws_message_sent) {
+      let message: IWebsocketMessage = {
+          client_type: EWSClientType.ADMIN,
+          message: EWSMessageType.START_ALL_DISPLAYS,
+          raspberry_pi_id: 0
+      }
+      let stringMessage = JSON.stringify(message);
+      this.props.dispatchMessage(stringMessage);
+    }
+  }
   render() {
-    return <Button onClick={() => this.startSchedule()} variant="contained">Start Schedule</Button>;
+    return (
+      <>
+       <Button onClick={() => this.startSchedule()} variant="contained">Start Schedule</Button>
+       <Button onClick={() => this.startAllDisplays()} variant="contained">Start All Displays</Button>
+      </>
+    )
+    
   }
 }
 
