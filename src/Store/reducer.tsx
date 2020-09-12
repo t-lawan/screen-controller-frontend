@@ -8,7 +8,7 @@ import {
   SET_AUDIO
 } from "./actions";
 import { IAudio } from "../Interfaces/IAudio";
-import { UPDATE_AUDIO, DISPATCH_MESSAGE, DISPATCH_MESSAGE_SENT, IS_CONNECTED, IS_DISCONNECTED } from './actions';
+import { UPDATE_AUDIO, DISPATCH_MESSAGE, DISPATCH_MESSAGE_SENT, IS_CONNECTED, IS_DISCONNECTED, SCHEDULE_STARTED, SCHEDULE_ENDED } from './actions';
 import {
   OPEN_MODAL,
   CLOSE_MODAL,
@@ -28,6 +28,7 @@ export interface IState {
   dispatched_ws_message: string;
   dispatched_ws_message_sent: boolean;
   is_connected: boolean;
+  has_schedule_started: boolean;
 }
 
 const initalState: IState = {
@@ -41,7 +42,8 @@ const initalState: IState = {
   ws_message_sent: false,
   dispatched_ws_message: "",
   dispatched_ws_message_sent: false,
-  is_connected: false
+  is_connected: false,
+  has_schedule_started: false
 };
 
 export const reducer = (state: IState = initalState, action: AnyAction) => {
@@ -120,6 +122,16 @@ export const reducer = (state: IState = initalState, action: AnyAction) => {
       return {
         ...state,
         is_connected: false
+      }
+    case SCHEDULE_STARTED:
+      return {
+        ...state,
+        has_schedule_started: true
+      }
+    case SCHEDULE_ENDED:
+      return {
+        ...state,
+        has_schedule_started: false
       }
     default:
       return state;

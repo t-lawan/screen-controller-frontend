@@ -29,6 +29,9 @@ export const DISPATCH_MESSAGE_SENT = 'DISPATCH_MESSAGE_SENT'
 export const IS_CONNECTED = 'IS_CONNECTED'
 export const IS_DISCONNECTED = 'IS_DISCONNECTED'
 
+export const SCHEDULE_STARTED = 'SCHEDULE_STARTED'
+export const SCHEDULE_ENDED = 'SCHEDULE_ENDED'
+
 
 export const sendMessage = (message: string) => {
     return  {
@@ -48,6 +51,18 @@ export const isConnected = () => {
 export const isDisconnected = () => {
     return {
         type: IS_DISCONNECTED
+    }
+}
+
+export const scheduleStarted = () => {
+    return {
+        type: SCHEDULE_STARTED
+    }
+}
+
+export const scheduleEnded = () => {
+    return {
+        type: SCHEDULE_ENDED
     }
 }
 

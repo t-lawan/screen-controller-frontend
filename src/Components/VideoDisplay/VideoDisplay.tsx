@@ -27,6 +27,7 @@ const VideoDisplayWrapper = styled.div<TVideoDisplayWrapper>`
   grid-template-columns: ${props =>
     props.isDisplay ? "repeat(3, 1fr)" : "1fr"};
   min-height: 80vh;
+  flex-direction: column;
   /* grid-column-gap: 4rem; */
 `;
 type TColumn = {
@@ -94,6 +95,11 @@ interface IVideoDisplayProps {
 interface IColumn {
   justifyContent: string;
   list: EScreenNumber[];
+}
+
+const PerformanceText = {
+  BEFORE_PERFORMANCE: 'Please wait for the performance to commence',
+  AFTER_PERFORMANCE: 'The performance has finished'
 }
 
 class VideoDisplay extends React.Component<
@@ -392,10 +398,13 @@ class VideoDisplay extends React.Component<
               ))}
             </React.Fragment>
           ) : (
+            <>
+            <h1> {PerformanceText.BEFORE_PERFORMANCE}</h1>
             <Button onClick={() => this.showVideos()} variant="contained">
               {" "}
               Click to Start
             </Button>
+            </>
           )}
         </VideoDisplayWrapper>
         <TimeCodeWrapper>
