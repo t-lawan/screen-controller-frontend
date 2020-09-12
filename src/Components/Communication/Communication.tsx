@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { IState } from "../../Store/reducer";
 import { Dispatch } from "redux";
-import { sendMessageComplete, sendMessage, dispatchMessageComplete } from '../../Store/actions';
+import { sendMessageComplete, sendMessage, dispatchMessageComplete, isConnected, isDisconnected } from '../../Store/actions';
 import { IWebsocketMessage } from "../../Interfaces/IRequestData";
 import { EWSClientType } from "../../Enums/EWSClientType";
 import { EWSMessageType } from "../../Enums/EWSMessageType";
@@ -18,6 +18,8 @@ interface ICommunicationProps {
   sendMessage: Function;
   sendMessageComplete: Function;
   dispatchMessageComplete: Function;
+  isConnected: Function;
+  isDisconnected: Function;
 }
 
 class Communication extends React.Component<
@@ -50,6 +52,7 @@ class Communication extends React.Component<
 
       let string = JSON.stringify(message);
       this.ws.send(string);
+      this.props.isConnected();
     };
 
     this.ws.onmessage = event => {
@@ -67,12 +70,13 @@ class Communication extends React.Component<
         case EWSMessageType.START_SCHEDULE:
           this.props.sendMessage(event.data);
         default:
-          console.log("NO_ACTION");
+          console.log("NO_ACTION", event.data);
           break;
       }
     };
 
     this.ws.onclose = () => {
+      this.props.isDisconnected()
       setTimeout(() => {
         this.setupWebsocket()
       }, 3000)
@@ -116,7 +120,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     sendMessageComplete: () => dispatch(sendMessageComplete()),
     dispatchMessageComplete: () => dispatch(dispatchMessageComplete()),
-    sendMessage: (message: string) => dispatch(sendMessage(message))
+    sendMessage: (message: string) => dispatch(sendMessage(message)),
+    isConnected: () => dispatch(isConnected()),
+    isDisconnected: () => dispatch(isDisconnected())
   };
 };
 

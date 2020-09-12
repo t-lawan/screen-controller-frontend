@@ -7,13 +7,22 @@ import { IState } from '../../Store/reducer';
 import { IWebsocketMessage } from '../../Interfaces/IRequestData';
 import { EWSClientType } from "../../Enums/EWSClientType";
 import { EWSMessageType } from "../../Enums/EWSMessageType";
+import styled from 'styled-components';
 
+
+type TConnectedText = {
+  isConnected: boolean;
+};
+const ConnectedText = styled.p<TConnectedText>`
+  color: ${props => props.isConnected ? 'green' : 'red'};
+`
 interface IControlState {}
 
 interface IControlProps {
-    ws_message: string,
-    ws_message_sent: boolean,
-    dispatchMessage: Function
+    ws_message: string;
+    ws_message_sent: boolean;
+    dispatchMessage: Function;
+    is_connected: boolean;
 }
 
 class Controls extends React.Component<IControlProps, IControlState> {
@@ -49,6 +58,7 @@ class Controls extends React.Component<IControlProps, IControlState> {
       <>
        <Button onClick={() => this.startSchedule()} variant="contained">Start Schedule</Button>
        <Button onClick={() => this.startAllDisplays()} variant="contained">Start All Displays</Button>
+        <ConnectedText isConnected={this.props.is_connected}> {this.props.is_connected ? 'CONNECTED' : 'CONNECTING'} </ConnectedText>
       </>
     )
     
@@ -58,7 +68,8 @@ class Controls extends React.Component<IControlProps, IControlState> {
 const mapStateToProps = (state: IState) => {
     return {
       ws_message: state.ws_message,
-      ws_message_sent: state.ws_message_sent
+      ws_message_sent: state.ws_message_sent,
+      is_connected: state.is_connected
     };
   };
   

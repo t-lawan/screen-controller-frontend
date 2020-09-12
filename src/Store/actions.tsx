@@ -26,6 +26,9 @@ export const SEND_MESSAGE_COMPLETE = 'SEND_MESSAGE_COMPLETE'
 export const DISPATCH_MESSAGE = 'DISPATCH_MESSAGE'
 export const DISPATCH_MESSAGE_SENT = 'DISPATCH_MESSAGE_SENT'
 
+export const IS_CONNECTED = 'IS_CONNECTED'
+export const IS_DISCONNECTED = 'IS_DISCONNECTED'
+
 
 export const sendMessage = (message: string) => {
     return  {
@@ -33,6 +36,18 @@ export const sendMessage = (message: string) => {
         ws_message: message,
         ws_message_sent: true
 
+    }
+}
+
+export const isConnected = () => {
+    return {
+        type: IS_CONNECTED
+    }
+}
+
+export const isDisconnected = () => {
+    return {
+        type: IS_DISCONNECTED
     }
 }
 
