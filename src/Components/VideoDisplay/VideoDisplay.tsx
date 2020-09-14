@@ -90,6 +90,7 @@ interface IVideoDisplayProps {
   ws_message_sent: boolean;
   sendMessageComplete: Function;
   sendMessage: Function;
+  has_schedule_happened: boolean;
 }
 
 interface IColumn {
@@ -199,6 +200,14 @@ class VideoDisplay extends React.Component<
     ) {
       this.handleWebsocketMessage();
     }
+
+    if(this.props.has_schedule_happened !== prevProps.has_schedule_happened) {
+      if(this.props.has_schedule_happened) {
+        this.showVideos();
+      } else {
+        this.hideVideos()
+      }
+    }
   }
 
   handleWebsocketMessage() {
@@ -222,7 +231,6 @@ class VideoDisplay extends React.Component<
 
     this.props.sendMessageComplete();
   }
-
   updateScreen(message: IWebsocketMessage) {
     let screens = this.state.screens;
     let screen: IScreenDisplay;
@@ -337,13 +345,17 @@ class VideoDisplay extends React.Component<
     }
   };
 
+  hideVideos = () => {
+    this.setState({
+      showVideos: false
+    });
+  }
   displayTimecode = (seconds: number) : string => {
     const format = val => `0${Math.floor(val)}`.slice(-2)
     let hours = seconds / 3600;
     let minutes = (seconds % 3600) / 60;
     return [hours, minutes, seconds % 60].map(format).join(':')
   };
-
   startTimer = () => {
     this.timer = setInterval(() => {
       this.setState({
@@ -399,10 +411,10 @@ class VideoDisplay extends React.Component<
             </React.Fragment>
           ) : (
             <>
-            <h1> {PerformanceText.BEFORE_PERFORMANCE}</h1>
+            <h1> {this.props.has_schedule_happened ? PerformanceText.AFTER_PERFORMANCE :  PerformanceText.BEFORE_PERFORMANCE}</h1>
             <Button onClick={() => this.showVideos()} variant="contained">
               {" "}
-              Click to Start
+              Click to view layout
             </Button>
             </>
           )}
@@ -418,7 +430,8 @@ class VideoDisplay extends React.Component<
 const mapStateToProps = (state: IState) => {
   return {
     ws_message: state.ws_message,
-    ws_message_sent: state.ws_message_sent
+    ws_message_sent: state.ws_message_sent,
+    has_schedule_happened: state.has_schedule_happened
   };
 };
 

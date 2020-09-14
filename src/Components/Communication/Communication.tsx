@@ -2,7 +2,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { IState } from "../../Store/reducer";
 import { Dispatch } from "redux";
-import { sendMessageComplete, sendMessage, dispatchMessageComplete, isConnected, isDisconnected } from '../../Store/actions';
+import { sendMessageComplete, sendMessage, dispatchMessageComplete, isConnected, isDisconnected, scheduleStarted, scheduleEnded } from '../../Store/actions';
 import { IWebsocketMessage } from "../../Interfaces/IRequestData";
 import { EWSClientType } from "../../Enums/EWSClientType";
 import { EWSMessageType } from "../../Enums/EWSMessageType";
@@ -20,6 +20,8 @@ interface ICommunicationProps {
   dispatchMessageComplete: Function;
   isConnected: Function;
   isDisconnected: Function;
+  scheduleStarted: Function;
+  scheduleEnded: Function;
 }
 
 class Communication extends React.Component<
@@ -69,6 +71,14 @@ class Communication extends React.Component<
           break;
         case EWSMessageType.START_SCHEDULE:
           this.props.sendMessage(event.data);
+          this.props.scheduleStarted()
+          break;
+        case EWSMessageType.STOP_SCHEDULE:
+          this.props.sendMessage(event.data);
+          setTimeout(() => {
+            this.props.scheduleEnded()
+          }, 5000)
+          break;
         default:
           console.log("NO_ACTION", event.data);
           break;
@@ -122,7 +132,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     dispatchMessageComplete: () => dispatch(dispatchMessageComplete()),
     sendMessage: (message: string) => dispatch(sendMessage(message)),
     isConnected: () => dispatch(isConnected()),
-    isDisconnected: () => dispatch(isDisconnected())
+    isDisconnected: () => dispatch(isDisconnected()),
+    scheduleStarted: () => dispatch(scheduleStarted()),
+    scheduleEnded: () => dispatch(scheduleEnded()),
   };
 };
 

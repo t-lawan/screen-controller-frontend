@@ -28,7 +28,7 @@ export interface IState {
   dispatched_ws_message: string;
   dispatched_ws_message_sent: boolean;
   is_connected: boolean;
-  has_schedule_started: boolean;
+  has_schedule_happened: boolean;
 }
 
 const initalState: IState = {
@@ -43,7 +43,7 @@ const initalState: IState = {
   dispatched_ws_message: "",
   dispatched_ws_message_sent: false,
   is_connected: false,
-  has_schedule_started: false
+  has_schedule_happened: false
 };
 
 export const reducer = (state: IState = initalState, action: AnyAction) => {
@@ -126,12 +126,12 @@ export const reducer = (state: IState = initalState, action: AnyAction) => {
     case SCHEDULE_STARTED:
       return {
         ...state,
-        has_schedule_started: true
+        has_schedule_happened: true
       }
     case SCHEDULE_ENDED:
       return {
         ...state,
-        has_schedule_started: false
+        has_schedule_happened: false
       }
     default:
       return state;

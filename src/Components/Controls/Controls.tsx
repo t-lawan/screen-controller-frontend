@@ -49,6 +49,18 @@ class Controls extends React.Component<IControlProps, IControlState> {
     }
   }
 
+  stopSchedule() {
+    if (!this.props.ws_message_sent) {
+      let message: IWebsocketMessage = {
+        client_type: EWSClientType.MASTER,
+        message: EWSMessageType.STOP_SCHEDULE,
+        raspberry_pi_id: 1
+      };
+      let stringMessage = JSON.stringify(message);
+      this.props.dispatchMessage(stringMessage);
+    }
+  }
+
   startAllDisplays() {
     if (!this.props.ws_message_sent) {
       let message: IWebsocketMessage = {
@@ -76,12 +88,21 @@ class Controls extends React.Component<IControlProps, IControlState> {
             Start Schedule
           </Button>
           <Button
+            onClick={() => this.stopSchedule()}
+            variant="contained"
+            disabled={!this.props.is_connected}
+          >
+            Stop Schedule
+          </Button>
+          <Button
             onClick={() => this.startAllDisplays()}
             variant="contained"
             disabled={!this.props.is_connected}
           >
             Start All Displays
           </Button>
+
+          
         </ControlsWrapper>
       </>
     );
