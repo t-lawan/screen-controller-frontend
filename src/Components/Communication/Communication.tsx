@@ -99,7 +99,7 @@ class Communication extends React.Component<
       prevProps.dispatched_ws_message_sent !== this.props.dispatched_ws_message_sent
     ) {
       let message: IWebsocketMessage = JSON.parse(this.props.dispatched_ws_message);
-      if(message.message === EWSMessageType.START_SCHEDULE || message.message === EWSMessageType.START_ALL_DISPLAYS) {
+      if(message.message === EWSMessageType.START_SCHEDULE || message.message === EWSMessageType.START_ALL_DISPLAYS || message.message === EWSMessageType.STOP_SCHEDULE) {
         this.sendMessage();
       }
     }
