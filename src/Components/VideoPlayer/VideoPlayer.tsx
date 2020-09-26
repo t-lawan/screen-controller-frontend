@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import "video-react/dist/video-react.css";
 import Video from "../../Assets/Video.mp4";
-import { Player, ControlBar } from "video-react";
+import { Player, ControlBar, LoadingSpinner } from "video-react";
 import { EVideoAspectRatio } from "../../Enums/EVideoAspectRatio";
 import { IState } from "../../Store/reducer";
 import { connect } from "react-redux";
@@ -43,6 +43,10 @@ interface IVideoPlayerState {
   isPlaying: boolean;
   videoUrl?: string;
 }
+
+const HiddenSpinner = styled(LoadingSpinner)`
+  display: none !important;
+`
 
 interface IVideoPlayerProps {
   videoUrl?: string;
@@ -128,6 +132,7 @@ class VideoPlayer extends React.Component<
             autoPlay={true}
           >
             <ControlBar disableCompletely={true} className="my-class" />
+            <HiddenSpinner />
           </StyledPlayer>
         ) : null}
         <Text>{this.props.text ? this.props.text : "placeholders"}</Text>

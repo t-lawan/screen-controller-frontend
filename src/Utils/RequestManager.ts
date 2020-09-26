@@ -45,6 +45,10 @@ export default class RequestManager {
     static async deleteVideo(data: IUpdateVideoRequestBody) {
         return await this.post(`${this.baseUrl}/video/delete`, data);
     }
+
+    static async isScheduleActive() {
+        return await this.get(`${this.baseUrl}/schedule/is_active`)
+    }
     private static get = async (url: string) => {
         let config: AxiosRequestConfig = {
             headers: {

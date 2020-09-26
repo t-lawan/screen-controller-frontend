@@ -83,6 +83,7 @@ interface IVideoDisplayState {
   playVideos: boolean;
   screens: IScreenContainer;
   timeInSeconds: number;
+  has_schedule_happened: boolean;
 }
 
 interface IVideoDisplayProps {
@@ -90,7 +91,7 @@ interface IVideoDisplayProps {
   ws_message_sent: boolean;
   sendMessageComplete: Function;
   sendMessage: Function;
-  has_schedule_happened: boolean;
+  is_schedule_running: boolean;
 }
 
 interface IColumn {
@@ -100,7 +101,7 @@ interface IColumn {
 
 const PerformanceText = {
   BEFORE_PERFORMANCE: 'Please wait for the performance to commence',
-  AFTER_PERFORMANCE: 'The performance has finished'
+  AFTER_PERFORMANCE: 'Thank you for watching. The performance has finished'
 }
 
 class VideoDisplay extends React.Component<
@@ -113,6 +114,7 @@ class VideoDisplay extends React.Component<
     this.state = {
       wrapperHeight: 1,
       timeInSeconds: 0,
+      has_schedule_happened: false,
       wrapperWidth: 1,
       showVideos: false,
       playVideos: false,
@@ -201,15 +203,30 @@ class VideoDisplay extends React.Component<
       this.handleWebsocketMessage();
     }
 
-    if(this.props.has_schedule_happened !== prevProps.has_schedule_happened) {
-      if(this.props.has_schedule_happened) {
-        this.showVideos();
+    if(this.props.is_schedule_running !== prevProps.is_schedule_running) {
+      if(this.props.is_schedule_running) {
+        this.startSchedule();
       } else {
-        this.hideVideos()
+        this.stopSchedule()
       }
     }
   }
 
+  startSchedule = () => {
+    this.setState({
+      has_schedule_happened: false
+    })
+    this.showVideos();
+
+  }
+
+  stopSchedule = () => {
+    this.setState({
+      has_schedule_happened: true
+    })
+    this.hideVideos()
+
+  }
   handleWebsocketMessage() {
     let message: IWebsocketMessage = JSON.parse(this.props.ws_message);
     if (message) {
@@ -338,17 +355,23 @@ class VideoDisplay extends React.Component<
       this.setState({
         wrapperHeight: this.wrapperRef.current.offsetHeight - 20,
         wrapperWidth: this.wrapperRef.current.offsetWidth / 3,
+      });
+    }
+    
+    this.setState({
         showVideos: true
       });
 
       this.startTimer();
-    }
   };
 
   hideVideos = () => {
     this.setState({
       showVideos: false
     });
+
+    this.stopTimer();
+
   }
   displayTimecode = (seconds: number) : string => {
     const format = val => `0${Math.floor(val)}`.slice(-2)
@@ -357,12 +380,19 @@ class VideoDisplay extends React.Component<
     return [hours, minutes, seconds % 60].map(format).join(':')
   };
   startTimer = () => {
+    this.setState({
+      timeInSeconds: 0
+    })
     this.timer = setInterval(() => {
       this.setState({
         timeInSeconds: this.state.timeInSeconds + 1
       });
     }, 1000);
   };
+
+  stopTimer = () => {
+    clearInterval(this.timer);
+  }
   render() {
     return (
       <React.Fragment>
@@ -411,11 +441,11 @@ class VideoDisplay extends React.Component<
             </React.Fragment>
           ) : (
             <>
-            <h1> {this.props.has_schedule_happened ? PerformanceText.AFTER_PERFORMANCE :  PerformanceText.BEFORE_PERFORMANCE}</h1>
-            <Button onClick={() => this.showVideos()} variant="contained">
+            <h1> {!this.props.is_schedule_running && this.state.has_schedule_happened  ? PerformanceText.AFTER_PERFORMANCE :  PerformanceText.BEFORE_PERFORMANCE}</h1>
+            {/* <Button onClick={() => this.showVideos()} variant="contained">
               {" "}
               Click to view layout
-            </Button>
+            </Button> */}
             </>
           )}
         </VideoDisplayWrapper>
@@ -431,7 +461,7 @@ const mapStateToProps = (state: IState) => {
   return {
     ws_message: state.ws_message,
     ws_message_sent: state.ws_message_sent,
-    has_schedule_happened: state.has_schedule_happened
+    is_schedule_running: state.is_schedule_running
   };
 };
 
