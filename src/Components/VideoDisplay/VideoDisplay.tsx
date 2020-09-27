@@ -16,6 +16,8 @@ import { EVideoAspectRatio } from "../../Enums/EVideoAspectRatio";
 import { IWebsocketMessage } from "../../Interfaces/IRequestData";
 import { EWSMessageType } from "../../Enums/EWSMessageType";
 import { IScreen } from "../../Interfaces/IScreen";
+import RequestManager from '../../Utils/RequestManager';
+
 
 type TVideoDisplayWrapper = {
   isDisplay: boolean;
@@ -183,7 +185,7 @@ class VideoDisplay extends React.Component<
     },
     {
       justifyContent: "flex-end",
-      list: [EScreenNumber.THREE, EScreenNumber.INSTALLATION_CAM]
+      list: [EScreenNumber.THREE]
     },
     {
       justifyContent: "flex-start",
@@ -193,6 +195,15 @@ class VideoDisplay extends React.Component<
 
   calculateHeight(percent: number): number {
     return percent * this.state.wrapperHeight;
+  }
+
+  async componentDidMount(){
+    let response = await RequestManager.isScheduleActive();
+    if(response.data){
+      let data = response.data.data
+        console.log('RESPONSE', data)
+    }
+
   }
 
   componentDidUpdate(prevProps: IVideoDisplayProps) {
@@ -399,6 +410,7 @@ class VideoDisplay extends React.Component<
         <VideoDisplayWrapper
           isDisplay={this.state.showVideos}
           ref={this.wrapperRef}
+          onClick={() => this.showVideos()}
         >
           {this.state.showVideos ? (
             <React.Fragment>
