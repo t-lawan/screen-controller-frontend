@@ -36,6 +36,10 @@ class AudioPlayer extends React.Component<
       }
   }
 
+  componentDidMount() {
+    this.play();
+  }
+
   componentDidUpdate(prevProps: IAudioPlayerProps) {
     if( this.props.ws_message_sent && (prevProps.ws_message_sent !== this.props.ws_message_sent)) {
       this.handleWebsocketMessage();
