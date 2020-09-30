@@ -7,6 +7,7 @@ import State from "../State/State";
 import Communication from "../Communication/Communication";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import styled from 'styled-components'
+import { GlobalStyle } from "../../index.styles";
 interface LayoutProps {
   children: any;
   title: string;
@@ -29,6 +30,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
       </Helmet>
       <State />
       <AudioPlayer />
+      <GlobalStyle/>
       <Communication />
       <LayoutWrapper blackBg={props.blackBg}>
         <FormModal />

@@ -102,8 +102,8 @@ interface IColumn {
 }
 
 const PerformanceText = {
-  BEFORE_PERFORMANCE: 'Please wait for the performance to commence',
-  AFTER_PERFORMANCE: 'Thank you for watching. The performance has finished'
+  BEFORE_PERFORMANCE: 'Please wait for the scheduled rehearsal to begin',
+  AFTER_PERFORMANCE: 'The scheduled rehearsal has ended'
 }
 
 class VideoDisplay extends React.Component<
