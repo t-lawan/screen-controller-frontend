@@ -53,7 +53,6 @@ class AudioPlayer extends React.Component<
     if(message) {
       switch(message.message) {
         case EWSMessageType.START_AUDIO:
-          console.log('START_AUDIO');
           this.play()
           break;
       }
