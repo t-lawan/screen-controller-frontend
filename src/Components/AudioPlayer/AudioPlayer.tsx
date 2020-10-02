@@ -55,6 +55,10 @@ class AudioPlayer extends React.Component<
         case EWSMessageType.START_AUDIO:
           this.play()
           break;
+        case EWSMessageType.START_AUDIO:
+          this.pause();
+          this.reset();
+          break;
       }
     }
 
