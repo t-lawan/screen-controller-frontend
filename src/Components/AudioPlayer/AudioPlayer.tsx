@@ -12,6 +12,7 @@ interface IAudioPlayerState {
     isPlaying: boolean;
     currentTime: number;
     length: number;
+    audio_file: string;
 }
 
 interface IAudioPlayerProps {
@@ -19,6 +20,10 @@ interface IAudioPlayerProps {
   ws_message_sent: boolean;
   sendMessageComplete: Function;
   sendMessage: Function;
+}
+
+const AudioMap = {
+  XXX: Sound
 }
 
 class AudioPlayer extends React.Component<
@@ -33,11 +38,8 @@ class AudioPlayer extends React.Component<
         isPlaying: false,
         currentTime: 0,
         length: 0,
+        audio_file: Sound
       }
-  }
-
-  componentDidMount() {
-    this.play();
   }
 
   componentDidUpdate(prevProps: IAudioPlayerProps) {
@@ -61,10 +63,20 @@ class AudioPlayer extends React.Component<
   }
 
   play = () => {
+    this.updateAudio('XXX')
     this.audio_tag.current.play()
     this.setState({
       isPlaying: true,
     })
+  }
+
+  updateAudio = (id: string) => {
+    let audioFile = AudioMap[id];
+    if(audioFile) {
+      this.setState({
+        audio_file: audioFile
+      })
+    }
   }
 
   pause = () => {
@@ -96,7 +108,7 @@ class AudioPlayer extends React.Component<
         controls
         hidden={true}
       >
-        <source src={Sound} />
+        <source src={this.state.audio_file} />
       </audio>
     );
   }
