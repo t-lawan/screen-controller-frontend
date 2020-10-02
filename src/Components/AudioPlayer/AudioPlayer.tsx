@@ -7,7 +7,8 @@ import { IState } from "../../Store/reducer";
 import { IWebsocketMessage } from "../../Interfaces/IRequestData";
 import { EWSClientType } from "../../Enums/EWSClientType";
 import { EWSMessageType } from "../../Enums/EWSMessageType";
-import Sound from '../../Assets/Laurie.mp3'
+import SoundOne from '../../Assets/Laurie.mp3'
+import SoundTwo from '../../Assets/Contagion.mp3'
 interface IAudioPlayerState {
     isPlaying: boolean;
     currentTime: number;
@@ -23,7 +24,8 @@ interface IAudioPlayerProps {
 }
 
 const AudioMap = {
-  XXX: Sound
+  XXX: SoundOne,
+  YYY: SoundTwo
 }
 
 class AudioPlayer extends React.Component<
@@ -38,7 +40,7 @@ class AudioPlayer extends React.Component<
         isPlaying: false,
         currentTime: 0,
         length: 0,
-        audio_file: Sound
+        audio_file: SoundOne
       }
   }
 
@@ -53,9 +55,9 @@ class AudioPlayer extends React.Component<
     if(message) {
       switch(message.message) {
         case EWSMessageType.START_AUDIO:
-          this.play()
+          this.play(message.payload ? message.payload : '')
           break;
-        case EWSMessageType.START_AUDIO:
+        case EWSMessageType.STOP_SCHEDULE:
           this.pause();
           this.reset();
           break;
@@ -65,8 +67,9 @@ class AudioPlayer extends React.Component<
     this.props.sendMessageComplete()
   }
 
-  play = () => {
-    this.updateAudio('XXX')
+  play = (id: string) => {
+    this.updateAudio(id)
+    this.audio_tag.current.load();
     this.audio_tag.current.play()
     this.setState({
       isPlaying: true,
