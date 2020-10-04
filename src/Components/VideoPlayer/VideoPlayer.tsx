@@ -8,43 +8,43 @@ import { IState } from "../../Store/reducer";
 import { connect } from "react-redux";
 import { IVideo } from "../../Interfaces/IVideo";
 
-import IntroGiseleLivestreamOne from '../../Assets/1_intro_gisellelivestream1.mp4'
-import IntroGiseleLivestreamTwo from '../../Assets/1_intro_gisellelivestream2.mp4'
-import IntroGiseleLivestreamThree from '../../Assets/1_intro_gisellelivestream3.mp4'
-import IntroGiseleLivestreamFour from '../../Assets/1_intro_gisellelivestream4.mp4'
-import IntroGiseleLivestreamFive from '../../Assets/1_intro_gisellelivestream5.mp4'
+// import IntroGiseleLivestreamOne from '../../Assets/1_intro_gisellelivestream1.mp4'
+// import IntroGiseleLivestreamTwo from '../../Assets/1_intro_gisellelivestream2.mp4'
+// import IntroGiseleLivestreamThree from '../../Assets/1_intro_gisellelivestream3.mp4'
+// import IntroGiseleLivestreamFour from '../../Assets/1_intro_gisellelivestream4.mp4'
+// import IntroGiseleLivestreamFive from '../../Assets/1_intro_gisellelivestream5.mp4'
 
-import IntroLeonidaLivestreamOne from '../../Assets/1_intro_leonidalivestream1.mp4'
-import IntroLeonidaLivestreamTwo from '../../Assets/1_intro_leonidalivestream2.mp4'
-import IntroLeonidaLivestreamThree from '../../Assets/1_intro_leonidalivestream3.mp4'
-import IntroLeonidaLivestreamFour from '../../Assets/1_intro_leonidalivestream4.mp4'
-import IntroLeonidaLivestreamFive from '../../Assets/1_intro_leonidalivestream5.mp4'
+// import IntroLeonidaLivestreamOne from '../../Assets/1_intro_leonidalivestream1.mp4'
+// import IntroLeonidaLivestreamTwo from '../../Assets/1_intro_leonidalivestream2.mp4'
+// import IntroLeonidaLivestreamThree from '../../Assets/1_intro_leonidalivestream3.mp4'
+// import IntroLeonidaLivestreamFour from '../../Assets/1_intro_leonidalivestream4.mp4'
+// import IntroLeonidaLivestreamFive from '../../Assets/1_intro_leonidalivestream5.mp4'
 
-import IntroMS3Dance from '../../Assets/1_intro_MS3_dance.mp4';
-import IntroMS4GiselleVHS from '../../Assets/1_intro_MS4_gisellevhs.mp4';
-import IntroMS5LeonidaVHS from '../../Assets/1_intro_MS5_leonidavhs.mp4';
+// import IntroMS3Dance from '../../Assets/1_intro_MS3_dance.mp4';
+// import IntroMS4GiselleVHS from '../../Assets/1_intro_MS4_gisellevhs.mp4';
+// import IntroMS5LeonidaVHS from '../../Assets/1_intro_MS5_leonidavhs.mp4';
 
 import Blank from '../../Assets/blank.mp4';
 
-const VideoMap = {
-  '1_intro_gisellelivestream1': IntroGiseleLivestreamOne,
-  '1_intro_gisellelivestream2': IntroGiseleLivestreamTwo,
-  '1_intro_gisellelivestream3': IntroGiseleLivestreamThree,
-  '1_intro_gisellelivestream4': IntroGiseleLivestreamFour,
-  '1_intro_gisellelivestream5': IntroGiseleLivestreamFive,
+// const VideoMap = {
+//   '1_intro_gisellelivestream1': IntroGiseleLivestreamOne,
+//   '1_intro_gisellelivestream2': IntroGiseleLivestreamTwo,
+//   '1_intro_gisellelivestream3': IntroGiseleLivestreamThree,
+//   '1_intro_gisellelivestream4': IntroGiseleLivestreamFour,
+//   '1_intro_gisellelivestream5': IntroGiseleLivestreamFive,
 
-  '1_intro_leonidalivestream1': IntroLeonidaLivestreamOne,
-  '1_intro_leonidalivestream2': IntroLeonidaLivestreamTwo,
-  '1_intro_leonidalivestream3': IntroLeonidaLivestreamThree,
-  '1_intro_leonidalivestream4': IntroLeonidaLivestreamFour,
-  '1_intro_leonidalivestream5': IntroLeonidaLivestreamFive,
+//   '1_intro_leonidalivestream1': IntroLeonidaLivestreamOne,
+//   '1_intro_leonidalivestream2': IntroLeonidaLivestreamTwo,
+//   '1_intro_leonidalivestream3': IntroLeonidaLivestreamThree,
+//   '1_intro_leonidalivestream4': IntroLeonidaLivestreamFour,
+//   '1_intro_leonidalivestream5': IntroLeonidaLivestreamFive,
 
-  '1_intro_MS3dance': IntroMS3Dance,
-  '1_intro_MS4_gisellevhs': IntroMS4GiselleVHS,
-  '1_intro_MS5_leonidavhs': IntroMS5LeonidaVHS,
+//   '1_intro_MS3dance': IntroMS3Dance,
+//   '1_intro_MS4_gisellevhs': IntroMS4GiselleVHS,
+//   '1_intro_MS5_leonidavhs': IntroMS5LeonidaVHS,
 
-  'blank': Blank
-}
+//   'blank': Blank
+// }
 
 const VideoPlayerWrapper = styled.div`
   display: flex;
