@@ -242,7 +242,7 @@ class VideoDisplay extends React.Component<
     if (message) {
       switch (message.message) {
         case EWSMessageType.START_VIDEO:
-          console.log('SCREEN', message.raspberry_pi_id)
+          console.log('ALIEN SCREEN', message.raspberry_pi_id)
           console.log('VID', message.payload)
           this.updateScreen(message);
           break;
@@ -250,7 +250,7 @@ class VideoDisplay extends React.Component<
           console.log("START_STREAM");
           break;
         case EWSMessageType.START_SCHEDULE:
-          console.log("START_SCHEDULE");
+          console.log("ALIEN START_SCHEDULE");
           break;
         default:
           console.log("DEFAULT");
