@@ -7,8 +7,8 @@ import { IState } from "../../Store/reducer";
 import { IWebsocketMessage } from "../../Interfaces/IRequestData";
 import { EWSClientType } from "../../Enums/EWSClientType";
 import { EWSMessageType } from "../../Enums/EWSMessageType";
-import SoundOne from '../../Assets/Laurie.mp3'
-import SoundTwo from '../../Assets/Contagion.mp3'
+import IntroAudioWav from '../../Assets/1_intro_audio.wav';
+import Contagion from '../../Assets/Contagion.mp3';
 interface IAudioPlayerState {
     isPlaying: boolean;
     currentTime: number;
@@ -24,8 +24,7 @@ interface IAudioPlayerProps {
 }
 
 const AudioMap = {
-  XXX: SoundOne,
-  YYY: SoundTwo
+  'ac02c792-0b72-46a0-a909-c015cbd94be8': IntroAudioWav
 }
 
 class AudioPlayer extends React.Component<
@@ -40,7 +39,7 @@ class AudioPlayer extends React.Component<
         isPlaying: false,
         currentTime: 0,
         length: 0,
-        audio_file: SoundOne
+        audio_file: IntroAudioWav
       }
   }
 
@@ -77,7 +76,10 @@ class AudioPlayer extends React.Component<
   }
 
   updateAudio = (id: string) => {
+    console.log('AUDIO', id)
     let audioFile = AudioMap[id];
+    console.log('AUDIO FILE', audioFile)
+
     if(audioFile) {
       this.setState({
         audio_file: audioFile

@@ -101,4 +101,8 @@ li {
   list-style-type: lower-roman;
 }
 
+.video-react-loading-spinner{
+  display:none !important;
+}
+
 `;
