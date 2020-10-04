@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import "video-react/dist/video-react.css";
+import "../../video.css";
 import Video from "../../Assets/Video.mp4";
 import { Player, ControlBar, LoadingSpinner } from "video-react";
 import { EVideoAspectRatio } from "../../Enums/EVideoAspectRatio";
