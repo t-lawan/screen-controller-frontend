@@ -21,6 +21,7 @@ interface IAudioPlayerProps {
   ws_message_sent: boolean;
   sendMessageComplete: Function;
   sendMessage: Function;
+  is_schedule_running: boolean;
 }
 
 const AudioMap = {
@@ -47,6 +48,13 @@ class AudioPlayer extends React.Component<
     if( this.props.ws_message_sent && (prevProps.ws_message_sent !== this.props.ws_message_sent)) {
       this.handleWebsocketMessage();
     }
+
+    if(this.props.is_schedule_running !== prevProps.is_schedule_running) {
+      if(!this.props.is_schedule_running) {
+        this.pause();
+        this.reset();
+      }
+    }
   }
 
   handleWebsocketMessage() {
@@ -57,8 +65,8 @@ class AudioPlayer extends React.Component<
           this.play(message.payload ? message.payload : '')
           break;
         case EWSMessageType.STOP_SCHEDULE:
-          this.pause();
-          this.reset();
+          // this.pause();
+          // this.reset();
           break;
       }
     }
@@ -125,7 +133,8 @@ class AudioPlayer extends React.Component<
 const mapStateToProps = (state: IState) => {
   return {
     ws_message: state.ws_message,
-    ws_message_sent: state.ws_message_sent
+    ws_message_sent: state.ws_message_sent,
+    is_schedule_running: state.is_schedule_running
   };
 };
 
