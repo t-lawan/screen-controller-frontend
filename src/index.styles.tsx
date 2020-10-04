@@ -102,7 +102,8 @@ li {
 }
 
 .video-react-loading-spinner{
-  display:none !important;
+  /* display:none !important; */
+  opacity: 0;
 }
 
 `;
