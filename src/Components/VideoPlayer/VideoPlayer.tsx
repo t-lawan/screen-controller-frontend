@@ -134,7 +134,7 @@ class VideoPlayer extends React.Component<
 
         if (video) {
           this.setState({
-            videoUrl: video.title
+            videoUrl: video.uri
           })
         }
       }
@@ -165,7 +165,7 @@ class VideoPlayer extends React.Component<
             fluid={false}
             height={this.props.height}
             preload={"metadata"}
-            src={this.state.videoUrl ? `${VideoMap[this.state.videoUrl]}` : Blank}
+            src={this.state.videoUrl ? `https://dm0cfdicfoqce.cloudfront.net/${this.state.videoUrl}` : Blank}
             loop={true}
             autoPlay={true}
           >
