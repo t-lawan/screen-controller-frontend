@@ -8,6 +8,22 @@ import { IState } from "../../Store/reducer";
 import { connect } from "react-redux";
 import { IVideo } from "../../Interfaces/IVideo";
 
+import VideoOne from '../../Assets/vid_01.mp4';
+import VideoTwo from '../../Assets/vid_02.mp4';
+import VideoThree from '../../Assets/vid_03.mp4';
+import VideoFour from '../../Assets/vid_04.mp4';
+import VideoFive from '../../Assets/vid_05.mp4';
+
+
+const VideoMap = {
+  'vid_01.mp4': VideoOne,
+  'vid_02.mp4': VideoTwo,
+  'vid_03.mp4': VideoThree,
+  'vid_04.mp4': VideoFour,
+  'vid_05.mp4': VideoFive,
+
+}
+
 const VideoPlayerWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -127,7 +143,7 @@ class VideoPlayer extends React.Component<
             fluid={false}
             height={this.props.height}
             preload={"metadata"}
-            src={this.state.videoUrl ? `https://dm0cfdicfoqce.cloudfront.net/${this.state.videoUrl}` : this.props.videoUrl}
+            src={this.state.videoUrl ? `${VideoMap[this.state.videoUrl]}` : this.props.videoUrl}
             loop={true}
             autoPlay={true}
           >
