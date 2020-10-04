@@ -198,11 +198,10 @@ class VideoDisplay extends React.Component<
   }
 
   async componentDidMount(){
-    let response = await RequestManager.isScheduleActive();
-    if(response.data){
-      let data = response.data.data
-        console.log('RESPONSE', data)
-    }
+    // let response = await RequestManager.isScheduleActive();
+    // if(response.data){
+    //   let data = response.data.data
+    // }
 
   }
 
@@ -243,6 +242,8 @@ class VideoDisplay extends React.Component<
     if (message) {
       switch (message.message) {
         case EWSMessageType.START_VIDEO:
+          console.log('SCREEN', message.raspberry_pi_id)
+          console.log('VID', message.payload)
           this.updateScreen(message);
           break;
         case EWSMessageType.START_STREAM:
