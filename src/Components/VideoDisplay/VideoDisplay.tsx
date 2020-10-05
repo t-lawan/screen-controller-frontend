@@ -399,7 +399,7 @@ class VideoDisplay extends React.Component<
       this.setState({
         timeInSeconds: this.state.timeInSeconds + 1
       });
-    }, 1000);
+    }, 2000);
   };
 
   stopTimer = () => {

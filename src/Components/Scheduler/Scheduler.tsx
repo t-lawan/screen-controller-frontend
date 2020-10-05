@@ -17,7 +17,6 @@ import { EWSClientType } from "../../Enums/EWSClientType";
 
 interface ISchedulerState {
   [key: string]: any;
-  schedule: any[]
 }
 interface ISchedulerProps {
   [key: string]: any;
@@ -41,9 +40,6 @@ class Scheduler extends React.Component<ISchedulerProps, ISchedulerState> {
   clock;
   constructor(props) {
     super(props);
-    this.state = {
-        schedule: []
-    }
     // this.screen_actions = [];
     this.current_time = 0;
     this.screen_one_index = 0;
