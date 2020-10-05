@@ -165,8 +165,8 @@ class VideoPlayer extends React.Component<
             fluid={false}
             height={this.props.height}
             preload={"metadata"}
-            src={this.state.videoUrl ? `https://dm0cfdicfoqce.cloudfront.net/${this.state.videoUrl}` : Blank}
-            loop={true}
+            src={this.state.videoUrl ? `https://dm0cfdicfoqce.cloudfront.net/${this.state.videoUrl}` : 'https://dm0cfdicfoqce.cloudfront.net/blank.mp4'}
+            loop={false}
             autoPlay={true}
           >
             <ControlBar disableCompletely={true} className="my-class" />
