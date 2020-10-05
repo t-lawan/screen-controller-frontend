@@ -121,9 +121,11 @@ class Scheduler extends React.Component<ISchedulerProps, ISchedulerState> {
       timecode: Math.max(...timeCodes) + 1000
     });
 
-    this.setState({
-        schedule: this.screen_actions
+    this.screen_actions = this.screen_actions.sort((a,b) => {
+        return a.timecode - b.timecode;
     })
+    console.log('VID', this.screen_actions)
+
   }
 
   start() {
@@ -149,6 +151,7 @@ class Scheduler extends React.Component<ISchedulerProps, ISchedulerState> {
         this.props.sendMessage(JSON.stringify(message));
         if (action.message === EWSMessageType.STOP_SCHEDULE) {
           this.stop();
+          console.log('MESSAGE', action.message)
         }
       });
     }
@@ -158,6 +161,7 @@ class Scheduler extends React.Component<ISchedulerProps, ISchedulerState> {
   stop() {
     clearInterval(this.clock);
     this.clock = null;
+    this.props.scheduleEnded()
     this.current_time = 0;
   }
   render() {

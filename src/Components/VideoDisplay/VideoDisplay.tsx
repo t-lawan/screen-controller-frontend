@@ -252,6 +252,9 @@ class VideoDisplay extends React.Component<
         case EWSMessageType.START_SCHEDULE:
           console.log("ALIEN START_SCHEDULE");
           break;
+        case EWSMessageType.STOP_SCHEDULE:
+          console.log("ALIEN START_SCHEDULE");
+          break;
         default:
           console.log("DEFAULT");
           break;
