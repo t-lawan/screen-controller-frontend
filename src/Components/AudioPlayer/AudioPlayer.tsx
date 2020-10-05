@@ -8,7 +8,8 @@ import { IWebsocketMessage } from "../../Interfaces/IRequestData";
 import { EWSClientType } from "../../Enums/EWSClientType";
 import { EWSMessageType } from "../../Enums/EWSMessageType";
 import IntroAudioWav from '../../Assets/1_intro_audio.wav';
-import Contagion from '../../Assets/Contagion.mp3';
+import TwoBroadcast1Audio from '../../Assets/2_Broadcast1_audio.wav';
+import ThreeFourSC1andBC from '../../Assets/3_4_Sc1andBC2.wav';
 interface IAudioPlayerState {
     isPlaying: boolean;
     currentTime: number;
@@ -25,7 +26,9 @@ interface IAudioPlayerProps {
 }
 
 const AudioMap = {
-  'ac02c792-0b72-46a0-a909-c015cbd94be8': IntroAudioWav
+  'ac02c792-0b72-46a0-a909-c015cbd94be8': IntroAudioWav,
+  '4ae17eca-a725-4c4b-9018-a91c169f72b2': TwoBroadcast1Audio,
+  'e1389bcc-ae81-4f56-84d9-7564cd43abd8': ThreeFourSC1andBC,
 }
 
 class AudioPlayer extends React.Component<

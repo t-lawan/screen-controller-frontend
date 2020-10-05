@@ -173,7 +173,7 @@ class VideoPlayer extends React.Component<
             <HiddenSpinner />
           </StyledPlayer>
         ) : null}
-        <Text>{this.props.text ? this.props.text : "placeholders"}</Text>
+        {/* <Text>{this.props.text ? this.props.text : "placeholders"}</Text> */}
       </VideoPlayerWrapper>
     );
   }
