@@ -8,6 +8,7 @@ import Communication from "../Communication/Communication";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import styled from 'styled-components'
 import { GlobalStyle } from "../../index.styles";
+import Scheduler from "../Scheduler/Scheduler";
 interface LayoutProps {
   children: any;
   title: string;
@@ -32,6 +33,7 @@ const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
       <AudioPlayer />
       <GlobalStyle/>
       <Communication />
+      <Scheduler />
       <LayoutWrapper blackBg={props.blackBg}>
         <FormModal />
         {/* <Navbar /> */}

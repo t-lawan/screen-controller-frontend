@@ -24,7 +24,6 @@ import { IVideo } from "../../Interfaces/IVideo";
 // import IntroMS4GiselleVHS from '../../Assets/1_intro_MS4_gisellevhs.mp4';
 // import IntroMS5LeonidaVHS from '../../Assets/1_intro_MS5_leonidavhs.mp4';
 
-import Blank from '../../Assets/blank.mp4';
 
 // const VideoMap = {
 //   '1_intro_gisellelivestream1': IntroGiseleLivestreamOne,

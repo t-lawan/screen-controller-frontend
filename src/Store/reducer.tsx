@@ -8,7 +8,16 @@ import {
   SET_AUDIO
 } from "./actions";
 import { IAudio } from "../Interfaces/IAudio";
-import { UPDATE_AUDIO, DISPATCH_MESSAGE, DISPATCH_MESSAGE_SENT, IS_CONNECTED, IS_DISCONNECTED, SCHEDULE_STARTED, SCHEDULE_ENDED } from './actions';
+import { SET_SCHEDULE } from './actions';
+import {
+  UPDATE_AUDIO,
+  DISPATCH_MESSAGE,
+  DISPATCH_MESSAGE_SENT,
+  IS_CONNECTED,
+  IS_DISCONNECTED,
+  SCHEDULE_STARTED,
+  SCHEDULE_ENDED
+} from "./actions";
 import {
   OPEN_MODAL,
   CLOSE_MODAL,
@@ -29,10 +38,12 @@ export interface IState {
   dispatched_ws_message_sent: boolean;
   is_connected: boolean;
   is_schedule_running: boolean;
+  schedule: any[];
 }
 
 const initalState: IState = {
   screens: [],
+  schedule: [],
   videos: [],
   audio: [],
   modal_open: false,
@@ -52,6 +63,11 @@ export const reducer = (state: IState = initalState, action: AnyAction) => {
       return {
         ...state,
         screens: action.screens
+      };
+    case SET_SCHEDULE:
+      return {
+        ...state,
+        schedule: action.schedule
       };
     case SET_VIDEOS:
       return {
@@ -117,22 +133,22 @@ export const reducer = (state: IState = initalState, action: AnyAction) => {
       return {
         ...state,
         is_connected: true
-      }
+      };
     case IS_DISCONNECTED:
       return {
         ...state,
         is_connected: false
-      }
+      };
     case SCHEDULE_STARTED:
       return {
         ...state,
         is_schedule_running: true
-      }
+      };
     case SCHEDULE_ENDED:
       return {
         ...state,
         is_schedule_running: false
-      }
+      };
     default:
       return state;
   }

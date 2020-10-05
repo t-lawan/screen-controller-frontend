@@ -11,6 +11,7 @@ export const UPDATE_SCREENS = 'UPDATE_SCREENS';
 export const SET_AUDIO = 'SET_AUDIO';
 export const UPDATE_AUDIO = 'UPDATE_AUDIO';
 
+export const SET_SCHEDULE = 'SET_SCHEDULE';
 
 
 export const HAS_LOADED = 'HAS_LOADED';
@@ -51,6 +52,13 @@ export const isConnected = () => {
 export const isDisconnected = () => {
     return {
         type: IS_DISCONNECTED
+    }
+}
+
+export const setSchedule = (schedule) => {
+    return {
+        type: SET_SCHEDULE,
+        schedule: schedule
     }
 }
 

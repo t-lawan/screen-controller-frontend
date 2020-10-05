@@ -87,10 +87,7 @@ class AudioPlayer extends React.Component<
   }
 
   updateAudio = (id: string) => {
-    console.log('AUDIO', id)
     let audioFile = AudioMap[id];
-    console.log('AUDIO FILE', audioFile)
-
     if(audioFile) {
       this.setState({
         audio_file: audioFile
