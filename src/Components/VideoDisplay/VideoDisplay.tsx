@@ -28,7 +28,7 @@ const VideoDisplayWrapper = styled.div<TVideoDisplayWrapper>`
   align-items: center;
   grid-template-columns: ${props =>
     props.isDisplay ? "repeat(3, 1fr)" : "1fr"};
-  min-height: 80vh;
+  min-height: 82vh;
   flex-direction: column;
   /* grid-column-gap: 4rem; */
 `;
@@ -402,7 +402,7 @@ class VideoDisplay extends React.Component<
       this.setState({
         timeInSeconds: this.state.timeInSeconds + 1
       });
-    }, 2000);
+    }, 1000);
   };
 
   stopTimer = () => {
