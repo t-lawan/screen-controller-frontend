@@ -10,6 +10,7 @@ import { EWSMessageType } from "../../Enums/EWSMessageType";
 import IntroAudioWav from '../../Assets/1_intro_audio.wav';
 import TwoBroadcast1Audio from '../../Assets/2_Broadcast1_audio.wav';
 import ThreeFourSC1andBC from '../../Assets/3_4_Sc1andBC2.wav';
+import ThreeFourSC1andBCV3 from '../../Assets/3_4_Sc1andBC2.wav';
 interface IAudioPlayerState {
     isPlaying: boolean;
     currentTime: number;
@@ -29,6 +30,7 @@ const AudioMap = {
   'ac02c792-0b72-46a0-a909-c015cbd94be8': IntroAudioWav,
   '4ae17eca-a725-4c4b-9018-a91c169f72b2': TwoBroadcast1Audio,
   'e1389bcc-ae81-4f56-84d9-7564cd43abd8': ThreeFourSC1andBC,
+  'eefae783-0c0f-4915-a9b2-9b4c7bc21ff5': ThreeFourSC1andBCV3,
 }
 
 class AudioPlayer extends React.Component<
