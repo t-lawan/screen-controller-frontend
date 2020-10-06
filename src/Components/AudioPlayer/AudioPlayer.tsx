@@ -10,7 +10,7 @@ import { EWSMessageType } from "../../Enums/EWSMessageType";
 import IntroAudioWav from '../../Assets/1_intro_audio.wav';
 import TwoBroadcast1Audio from '../../Assets/2_Broadcast1_audio.wav';
 import ThreeFourSC1andBC from '../../Assets/3_4_Sc1andBC2.wav';
-import ThreeFourSC1andBCV3 from '../../Assets/3_4_Sc1andBC2.wav';
+import ThreeFourSC1andBCV3 from '../../Assets/3_4_Sc1andBC2v3.wav';
 interface IAudioPlayerState {
     isPlaying: boolean;
     currentTime: number;
