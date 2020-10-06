@@ -17,6 +17,9 @@ import { IWebsocketMessage } from "../../Interfaces/IRequestData";
 import { EWSMessageType } from "../../Enums/EWSMessageType";
 import { IScreen } from "../../Interfaces/IScreen";
 import RequestManager from '../../Utils/RequestManager';
+import { EWSClientType } from '../../Enums/EWSClientType';
+import { scheduleStarted } from '../../Store/actions';
+import { FunctionDeclaration } from "@babel/types";
 
 
 type TVideoDisplayWrapper = {
@@ -92,6 +95,7 @@ interface IVideoDisplayProps {
   ws_message: string;
   ws_message_sent: boolean;
   sendMessageComplete: Function;
+  scheduleStarted: Function;
   sendMessage: Function;
   is_schedule_running: boolean;
 }
@@ -235,7 +239,16 @@ class VideoDisplay extends React.Component<
       has_schedule_happened: true
     })
     this.hideVideos()
+  }
 
+  promptScheduleProcess = () => {
+    let message: IWebsocketMessage = {
+      client_type: EWSClientType.MASTER,
+      message: EWSMessageType.START_SCHEDULE,
+      raspberry_pi_id: 1
+    };
+    this.props.sendMessage(JSON.stringify(message));
+    this.props.scheduleStarted()
   }
   handleWebsocketMessage() {
     let message: IWebsocketMessage = JSON.parse(this.props.ws_message);
@@ -414,7 +427,7 @@ class VideoDisplay extends React.Component<
         <VideoDisplayWrapper
           isDisplay={this.state.showVideos}
           ref={this.wrapperRef}
-          onClick={() => this.showVideos()}
+          onClick={() => this.promptScheduleProcess()}
         >
           {this.state.showVideos ? (
             <React.Fragment>
@@ -484,7 +497,8 @@ const mapStateToProps = (state: IState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     sendMessageComplete: () => dispatch(sendMessageComplete()),
-    sendMessage: (message: string) => dispatch(sendMessage(message))
+    sendMessage: (message: string) => dispatch(sendMessage(message)),
+    scheduleStarted: () => dispatch(scheduleStarted())
   };
 };
 
