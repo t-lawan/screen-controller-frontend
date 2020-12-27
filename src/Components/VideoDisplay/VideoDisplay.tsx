@@ -19,7 +19,6 @@ import { IScreen } from "../../Interfaces/IScreen";
 import RequestManager from '../../Utils/RequestManager';
 import { EWSClientType } from '../../Enums/EWSClientType';
 import { scheduleStarted } from '../../Store/actions';
-import { FunctionDeclaration } from "@babel/types";
 
 
 type TVideoDisplayWrapper = {
